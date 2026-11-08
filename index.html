@@ -123,7 +123,8 @@
   .shot{padding:22px 0; border-bottom:1px solid var(--line)}
   .shot h3{font-size:19px; line-height:1.4; margin:0 0 4px}
   .shot p{margin:0}
-  .shot img{display:block; width:100%; max-width:300px; height:auto; margin-top:14px; border:1px solid var(--line); border-radius:8px}
+  .shot img, .shot video{display:block; width:100%; max-width:300px; height:auto; margin-top:14px; border:1px solid var(--line); border-radius:8px; background:var(--chip)}
+  .shot .tag{display:inline-block; margin-top:10px; font-size:13px; color:var(--muted)}
   /* 画面切り替え（スクリプトなしで動く） */
   .view{position:absolute; opacity:0; pointer-events:none}
   #kousakushitsu, #tools{display:none}
@@ -193,7 +194,7 @@
   <div class="inner">
     <label class="back" for="v-top" role="button" tabindex="0">入口にもどる</label>
     <h1>仕事のツール集</h1>
-    <p>訪問介護の事業所で、毎日の事務に使っている道具です。写真はどれも、架空の「見本」のデータで動かした画面です。</p>
+    <p>訪問介護の事業所で、毎日の事務に使っている道具です。動画と写真はどれも、架空の「見本」のデータで動かした画面です。</p>
   </div>
 </div>
 
@@ -202,12 +203,12 @@
     <article class="shot">
       <h3>透析終了時間管理と送迎の組み方</h3>
       <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を自動で組み、ヘルパーさんに送るLINEの文まで作ります。いちばん毎日使っている道具です。</p>
-      <img src="img/toseki.jpg" width="390" height="560" loading="lazy" alt="送迎の組み方の画面。車ごとに、お迎えの時刻・利用者（見本）・送り先が並んでいる">
+      <video src="video/toseki.mp4" poster="video/toseki-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="送迎の組み方を動かしている動画。車の台数を3台から2台に減らすと組み方が変わり、LINE用の文をコピーする"></video>
     </article>
     <article class="shot">
       <h3>休み希望（ヘルパーさんの画面）</h3>
       <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送ります。名前を選んで日付を押すだけです。</p>
-      <img src="img/yasumi.jpg" width="390" height="560" loading="lazy" alt="休み希望の画面。カレンダーの日付を押して希望を入れる">
+      <video src="video/yasumi.mp4" poster="video/yasumi-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="休み希望を入れている動画。名前を選び、日付を押して休・年休・午前休を入れる"></video>
     </article>
     <article class="shot">
       <h3>休み希望（事務所の画面）</h3>
@@ -354,6 +355,9 @@
         if (e.key === "Enter" || e.key === " "){ e.preventDefault(); l.click(); }
       });
     });
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.shot video').forEach(function(v){ v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
+    }
   }catch(e){}
 </script>
 </body>
