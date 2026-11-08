@@ -119,13 +119,11 @@
   .foot a{color:var(--ink)}
   .band.ai{background:var(--ai); color:#fff}
   .band.ai .back:focus-visible{outline-color:#fff}
-  .group{margin-top:26px}
-  .group h2{font-size:21px; margin:0 0 4px}
-  .group > p{margin:0 0 4px; color:var(--muted); font-size:15px}
-  .tool{padding:18px 0; border-bottom:1px solid var(--line)}
-  .tool h3{font-size:19px; line-height:1.4; margin:0 0 2px}
-  .tool p{margin:0}
-  .tool .hint{font-size:14px; color:var(--muted); margin-top:4px}
+  .lead-note{margin:22px 0 4px; font-size:16px}
+  .shot{padding:22px 0; border-bottom:1px solid var(--line)}
+  .shot h3{font-size:19px; line-height:1.4; margin:0 0 4px}
+  .shot p{margin:0}
+  .shot img{display:block; width:100%; max-width:300px; height:auto; margin-top:14px; border:1px solid var(--line); border-radius:8px}
   /* 画面切り替え（スクリプトなしで動く） */
   .view{position:absolute; opacity:0; pointer-events:none}
   #kousakushitsu, #tools{display:none}
@@ -158,7 +156,7 @@
       </svg>
       <div>
         <h2>仕事のツール集</h2>
-        <p>予定や送迎、費用の計算など、訪問介護の事務で使っている道具です。中身はすべて架空のデータなので、自由にさわれます。</p>
+        <p>予定や送迎、費用の計算など、訪問介護の事務で使っている道具を、画面の写真で紹介しています。</p>
       </div>
       <span class="go">ツール集をひらく</span>
     </label>
@@ -176,7 +174,7 @@
     </label>
   </main>
 
-  <p class="note">どれもスマホのブラウザでそのまま動きます。アプリのインストールやログインはいりません。</p>
+  <p class="note">工作室の作品は、スマホのブラウザでそのまま動きます。アプリのインストールやログインはいりません。</p>
 
   <section class="contact" aria-labelledby="contact-h">
     <h2 id="contact-h">ご相談・ご連絡</h2>
@@ -195,79 +193,39 @@
   <div class="inner">
     <label class="back" for="v-top" role="button" tabindex="0">入口にもどる</label>
     <h1>仕事のツール集</h1>
-    <p>訪問介護の事業所で、毎日の事務に使っている道具です。ここで開くものは、どれも架空のデータで動いています。</p>
+    <p>訪問介護の事業所で、毎日の事務に使っている道具です。写真はどれも、架空の「見本」のデータで動かした画面です。</p>
   </div>
 </div>
 
 <main class="ks-main">
-  <section class="group">
-    <h2>見本のデータで動かす</h2>
-    <p>ふだんは事業所のアカウントでログインして使う道具です。ここでは架空の「見本」さんが入っていて、さわっても保存されません。</p>
-    <article class="tool">
+  <p class="lead-note">実際に動くところは、会場でお見せします。ほかの道具も含めて、気になるものがあれば声をかけてください。</p>
+    <article class="shot">
       <h3>透析終了時間管理と送迎の組み方</h3>
-      <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を組み、ヘルパーさんに送るLINEの文まで作ります。</p>
-      <p class="hint">いちばん毎日使っている道具です。「最初の見本に戻す」でいつでもやり直せます。</p>
-      <div class="links"><a class="open" href="toseki-demo/">見本で動かす</a></div>
+      <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を自動で組み、ヘルパーさんに送るLINEの文まで作ります。いちばん毎日使っている道具です。</p>
+      <img src="img/toseki.jpg" width="390" height="560" loading="lazy" alt="送迎の組み方の画面。車ごとに、お迎えの時刻・利用者（見本）・送り先が並んでいる">
     </article>
-    <article class="tool">
+    <article class="shot">
       <h3>休み希望（ヘルパーさんの画面）</h3>
-      <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送る画面です。名前を選んで日付を押すだけで送れます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/yasumi/?demo">見本で動かす</a></div>
+      <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送ります。名前を選んで日付を押すだけです。</p>
+      <img src="img/yasumi.jpg" width="390" height="560" loading="lazy" alt="休み希望の画面。カレンダーの日付を押して希望を入れる">
     </article>
-    <article class="tool">
+    <article class="shot">
       <h3>休み希望（事務所の画面）</h3>
       <p>届いた休み希望を一覧とグラフで見て、勤務表に取り込みます。まだ出していない人へのお知らせ文も作れます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/yasumi/admin.html?demo">見本で動かす</a></div>
+      <img src="img/yasumi_admin.jpg" width="390" height="560" loading="lazy" alt="休み希望の管理画面。提出の人数と、日ごとの一覧">
     </article>
-    <article class="tool">
+    <article class="shot">
       <h3>車両管理表</h3>
       <p>社用車ごとの車検日・保険・オイル交換を管理し、60日以内にやることを上に出します。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/sharyo/?demo">見本で動かす</a></div>
+      <img src="img/sharyo.jpg" width="390" height="560" loading="lazy" alt="車両管理表の画面。これからやることと、月ごとの車検の台数">
     </article>
-    <article class="tool">
-      <h3>スタッフ連絡先</h3>
-      <p>職員の電話番号を探す・直すことができ、紙の名簿と同じ形でA4に印刷できます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/renraku/?demo">見本で動かす</a></div>
-    </article>
-  </section>
-
-  <section class="group">
-    <h2>そのまま使える</h2>
-    <p>ログインなしで使える道具です。入れた内容は、お使いのスマホの中だけに残ります。</p>
-    <article class="tool">
+    <article class="shot">
       <h3>介護保険の費用計算</h3>
       <p>サービスと回数を選ぶと、単位数と利用者さんの負担額、介護タクシーの料金を計算します。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/hiyou/">ひらく</a></div>
+      <img src="img/hiyou.jpg" width="390" height="560" loading="lazy" alt="介護保険の費用計算の画面">
     </article>
-    <article class="tool">
-      <h3>障害福祉の費用計算</h3>
-      <p>居宅介護・移動支援・介護タクシーの費用を計算し、利用者さんに渡す案内を印刷できます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/idoshien/">ひらく</a></div>
-    </article>
-    <article class="tool">
-      <h3>ガイドヘルパー報告書</h3>
-      <p>外出の記録を入れると、那覇市の様式の実績報告書を作って印刷できます。</p>
-      <p class="hint">「印刷の見本を見る」で、架空の利用者さんの記入例が見られます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/guide-houkoku/">ひらく</a></div>
-    </article>
-    <article class="tool">
-      <h3>ヒヤリハット・事故報告書</h3>
-      <p>スマホで書いて、A4の報告書として印刷できます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/hiyari/">ひらく</a></div>
-    </article>
-    <article class="tool">
-      <h3>ケア会議 議事録</h3>
-      <p>会議の記録を書くと、特定事業所加算に必要な項目が抜けていないかを知らせます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/gijiroku/">ひらく</a></div>
-    </article>
-    <article class="tool">
-      <h3>QRカード（名刺）</h3>
-      <p>QRコード入りの名刺を作って、名刺用紙に印刷したり画像で保存したりできます。</p>
-      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/qr-card/">ひらく</a></div>
-    </article>
-  </section>
 
-  <p class="foot">ほかの道具も含めた一覧は <a href="https://kaigo-tools-3888d.web.app/">ツール集（試し用）</a> で見られます。ログインが必要なものは、そこからは開けません。<br><label class="back-link" for="v-top" role="button" tabindex="0">入口にもどる</label></p>
+  <p class="foot">ご相談は、入口のページの下の連絡先から受け付けています。<br><label class="back-link" for="v-top" role="button" tabindex="0">入口にもどる</label></p>
 </main>
 </section>
 
