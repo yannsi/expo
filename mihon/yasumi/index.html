@@ -436,7 +436,7 @@
   });
 
   $("hotday").textContent = dayLabel(24);
-  init(); setTab("h");
+  init(); setTab(location.hash==="#office" ? "o" : "h");
 })();
 </script>
 </body>

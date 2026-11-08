@@ -124,6 +124,9 @@
   .shot h3{font-size:19px; line-height:1.4; margin:0 0 4px}
   .shot p{margin:0}
   .shot img, .shot video{display:block; width:100%; max-width:300px; height:auto; margin-top:14px; border:1px solid var(--line); border-radius:8px; background:var(--chip)}
+  .shot .try{display:inline-block; margin-top:12px; background:var(--ai); color:#fff; font-weight:700; text-decoration:none; padding:10px 18px; border-radius:999px; font-size:16px}
+  .shot .try:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+  .shot .try::after{content:" →"}
   .shot .tag{display:inline-block; margin-top:10px; font-size:13px; color:var(--muted)}
   /* 画面切り替え（スクリプトなしで動く） */
   .view{position:absolute; opacity:0; pointer-events:none}
@@ -199,25 +202,29 @@
 </div>
 
 <main class="ks-main">
-  <p class="lead-note">実際に動くところは、会場でお見せします。ほかの道具も含めて、気になるものがあれば声をかけてください。</p>
+  <p class="lead-note">「見本で動かす」を押すと、架空のデータでその場でさわって試せます。ログインはいらず、さわっても保存されません。</p>
     <article class="shot">
       <h3>透析終了時間管理と送迎の組み方</h3>
       <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を自動で組み、ヘルパーさんに送るLINEの文まで作ります。いちばん毎日使っている道具です。</p>
+      <a class="try" href="mihon/toseki/">見本で動かす</a>
       <video src="video/toseki.mp4" poster="video/toseki-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="送迎の組み方を動かしている動画。車の台数を3台から2台に減らすと組み方が変わり、LINE用の文をコピーする"></video>
     </article>
     <article class="shot">
       <h3>休み希望（ヘルパーさんの画面）</h3>
       <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送ります。名前を選んで日付を押すだけです。</p>
+      <a class="try" href="mihon/yasumi/">見本で動かす</a>
       <video src="video/yasumi.mp4" poster="video/yasumi-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="休み希望を入れている動画。名前を選び、日付を押して休・年休・午前休を入れる"></video>
     </article>
     <article class="shot">
       <h3>休み希望（事務所の画面）</h3>
       <p>届いた休み希望を一覧とグラフで見て、勤務表に取り込みます。まだ出していない人へのお知らせ文も作れます。</p>
+      <a class="try" href="mihon/yasumi/#office">見本で動かす</a>
       <img src="img/yasumi_admin.jpg" width="390" height="560" loading="lazy" alt="休み希望の管理画面。提出の人数と、日ごとの一覧">
     </article>
     <article class="shot">
       <h3>車両管理表</h3>
       <p>社用車ごとの車検日・保険・オイル交換を管理し、60日以内にやることを上に出します。</p>
+      <a class="try" href="mihon/sharyou/">見本で動かす</a>
       <img src="img/sharyo.jpg" width="390" height="560" loading="lazy" alt="車両管理表の画面。これからやることと、月ごとの車検の台数">
     </article>
     <article class="shot">
