@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>神里伸也の道具箱</title>
+<meta name="description" content="訪問介護の現場で使っている仕事のツールと、趣味で作った作品の入口です。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F8F6;
+    --ink:#1F2A33;
+    --muted:#56636D;
+    --ai:#1E4E79;      /* 藍：仕事 */
+    --ai-ink:#FFFFFF;
+    --kiiro:#F2B705;   /* 紅型の黄：工作 */
+    --kiiro-ink:#2A2100;
+    --line:#D9DED9;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141A1F; --ink:#E9EEF0; --muted:#A3AFB7;
+      --ai:#2C6599; --kiiro:#E5AD00; --line:#2B353D;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141A1F; --ink:#E9EEF0; --muted:#A3AFB7;
+    --ai:#2C6599; --kiiro:#E5AD00; --line:#2B353D;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"BIZ UDPGothic","BIZ UDゴシック","Hiragino Sans","Yu Gothic UI",sans-serif;
+    font-size:17px; line-height:1.75;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:28px 16px 40px}
+
+  header .who{font-size:15px; color:var(--muted); margin:0}
+  header .who strong{color:var(--ink); font-size:18px; margin-right:.6em}
+  h1{
+    font-size:clamp(30px, 8.4vw, 46px); line-height:1.3; font-weight:700;
+    letter-spacing:.01em; margin:18px 0 10px;
+  }
+  .lead{color:var(--muted); margin:0 0 28px; max-width:34em}
+
+  .doors{display:grid; gap:14px}
+  @media (min-width:640px){ .doors{grid-template-columns:1fr 1fr} }
+
+  .door{
+    display:flex; flex-direction:column; justify-content:space-between;
+    min-height:230px; padding:22px 20px 20px; border-radius:6px;
+    text-decoration:none; position:relative; overflow:hidden;
+  }
+  .door:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+  .door.work{background:var(--ai); color:var(--ai-ink)}
+  .door.craft{background:var(--kiiro); color:var(--kiiro-ink)}
+  .door h2{font-size:28px; line-height:1.3; margin:0 0 8px; position:relative}
+  .door p{margin:0; font-size:16px; line-height:1.7; position:relative; max-width:20em}
+  .door .go{
+    margin-top:22px; align-self:flex-start; position:relative;
+    font-weight:700; font-size:17px; padding:10px 18px; border-radius:999px;
+  }
+  .door.work .go{background:#fff; color:var(--ai)}
+  .door.craft .go{background:var(--kiiro-ink); color:var(--kiiro)}
+  .door svg.mark{position:absolute; right:-18px; bottom:-18px; width:150px; height:150px; opacity:.16}
+  .door:active{transform:translateY(1px)}
+
+  .note{
+    margin:26px 0 0; padding:14px 16px; border-left:4px solid var(--line);
+    color:var(--muted); font-size:15px;
+  }
+
+  footer{margin-top:36px; padding-top:18px; border-top:1px solid var(--line); font-size:15px; color:var(--muted)}
+  footer a{color:var(--ink)}
+  footer p{margin:4px 0}
+  :root{--chip:#ECEFEA}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--chip:#222C33}}
+  :root[data-theme="dark"]{--chip:#222C33}
+
+  .band{background:var(--kiiro); color:var(--kiiro-ink)}
+  .band .inner{max-width:720px; margin:0 auto; padding:18px 16px 26px}
+  .back{color:inherit; font-size:15px; text-decoration:none; display:inline-block; padding:6px 0}
+  .back:focus-visible{outline:3px solid var(--kiiro-ink); outline-offset:2px}
+  .band h1{font-size:clamp(34px, 9vw, 48px); line-height:1.25; margin:8px 0 6px}
+  .band p{margin:0; max-width:32em}
+
+  .ks-main{max-width:720px; margin:0 auto; padding:8px 16px 40px}
+  .piece{
+    display:grid; grid-template-columns:56px 1fr; gap:4px 16px;
+    padding:24px 0; border-bottom:1px solid var(--line);
+  }
+  .piece svg{width:56px; height:56px; color:var(--ai); grid-row:span 2}
+  .piece h2{font-size:22px; line-height:1.4; margin:2px 0 4px}
+  .piece p{margin:0}
+  .needs{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0; padding:0; list-style:none}
+  .needs li{background:var(--chip); color:var(--muted); font-size:14px; padding:2px 10px; border-radius:4px}
+  .links{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; margin-top:14px}
+  .open{
+    background:var(--ai); color:#fff; font-weight:700; text-decoration:none;
+    padding:9px 18px; border-radius:999px; font-size:16px;
+  }
+  .code{color:var(--muted); font-size:15px}
+  a:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+  .caution{font-size:14px; color:var(--muted); margin-top:8px}
+
+  .foot{margin-top:28px; font-size:15px; color:var(--muted)}
+  .foot a{color:var(--ink)}
+  .band.ai{background:var(--ai); color:#fff}
+  .band.ai .back:focus-visible{outline-color:#fff}
+  .group{margin-top:26px}
+  .group h2{font-size:21px; margin:0 0 4px}
+  .group > p{margin:0 0 4px; color:var(--muted); font-size:15px}
+  .tool{padding:18px 0; border-bottom:1px solid var(--line)}
+  .tool h3{font-size:19px; line-height:1.4; margin:0 0 2px}
+  .tool p{margin:0}
+  .tool .hint{font-size:14px; color:var(--muted); margin-top:4px}
+  /* 画面切り替え（スクリプトなしで動く） */
+  .view{position:absolute; opacity:0; pointer-events:none}
+  #kousakushitsu, #tools{display:none}
+  #v-tools:checked ~ #tools{display:block}
+  #v-tools:checked ~ #iriguchi{display:none}
+  #v-ks:checked ~ #kousakushitsu{display:block}
+  #v-ks:checked ~ #iriguchi{display:none}
+  label.door, label.back, label.back-link{cursor:pointer}
+  label.back-link{text-decoration:underline; color:var(--ink)}
+  label:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+</style>
+</head>
+<body>
+<input type="radio" name="view" id="v-top" class="view" checked>
+<input type="radio" name="view" id="v-ks" class="view">
+<input type="radio" name="view" id="v-tools" class="view">
+<section id="iriguchi">
+<div class="wrap">
+  <header>
+    <p class="who"><strong>神里 伸也</strong>訪問介護ヘルパー</p>
+    <h1>現場で使う道具と、<br>作ってみたもの。</h1>
+    <p class="lead">介護の仕事をしながら、毎日の困りごとを減らす道具を自分で作っています。気になる方をひらいてみてください。</p>
+  </header>
+
+  <main class="doors">
+    <label class="door work" for="v-tools" role="button" tabindex="0">
+      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="6">
+        <rect x="14" y="30" width="72" height="52" rx="6"/>
+        <path d="M36 30V20h28v10M14 52h72"/>
+      </svg>
+      <div>
+        <h2>仕事のツール集</h2>
+        <p>予定や送迎、費用の計算など、訪問介護の事務で使っている道具です。中身はすべて架空のデータなので、自由にさわれます。</p>
+      </div>
+      <span class="go">ツール集をひらく</span>
+    </label>
+
+    <label class="door craft" for="v-ks" role="button" tabindex="0">
+      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="6">
+        <rect x="18" y="18" width="26" height="26"/><rect x="56" y="18" width="26" height="26"/>
+        <rect x="18" y="56" width="26" height="26"/><path d="M58 60h8v8h-8zM74 74h8v8h-8z"/>
+      </svg>
+      <div>
+        <h2>工作室</h2>
+        <p>声を入れるQRコード、カメラで脈を見るページなど、仕事とは別に作った作品です。スマホのカメラやマイクで試せます。</p>
+      </div>
+      <span class="go">工作室をひらく</span>
+    </label>
+  </main>
+
+  <p class="note">どれもスマホのブラウザでそのまま動きます。アプリのインストールやログインはいりません。</p>
+
+  <footer>
+    <p>作品のコードは GitHub で公開しています：<a href="https://github.com/yannsi">github.com/yannsi</a></p>
+    <p>リゾテックエキスポ（11月19日・20日）展示用ページ</p>
+  </footer>
+</div>
+</section>
+
+<section id="tools">
+<div class="band ai">
+  <div class="inner">
+    <label class="back" for="v-top" role="button" tabindex="0">入口にもどる</label>
+    <h1>仕事のツール集</h1>
+    <p>訪問介護の事業所で、毎日の事務に使っている道具です。ここで開くものは、どれも架空のデータで動いています。</p>
+  </div>
+</div>
+
+<main class="ks-main">
+  <section class="group">
+    <h2>見本のデータで動かす</h2>
+    <p>ふだんは事業所のアカウントでログインして使う道具です。ここでは架空の「見本」さんが入っていて、さわっても保存されません。</p>
+    <article class="tool">
+      <h3>透析終了時間管理と送迎の組み方</h3>
+      <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を組み、ヘルパーさんに送るLINEの文まで作ります。</p>
+      <p class="hint">いちばん毎日使っている道具です。「最初の見本に戻す」でいつでもやり直せます。</p>
+      <div class="links"><a class="open" href="toseki-demo/">見本で動かす</a></div>
+    </article>
+    <article class="tool">
+      <h3>休み希望（ヘルパーさんの画面）</h3>
+      <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送る画面です。名前を選んで日付を押すだけで送れます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/yasumi/?demo">見本で動かす</a></div>
+    </article>
+    <article class="tool">
+      <h3>休み希望（事務所の画面）</h3>
+      <p>届いた休み希望を一覧とグラフで見て、勤務表に取り込みます。まだ出していない人へのお知らせ文も作れます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/yasumi/admin.html?demo">見本で動かす</a></div>
+    </article>
+    <article class="tool">
+      <h3>車両管理表</h3>
+      <p>社用車ごとの車検日・保険・オイル交換を管理し、60日以内にやることを上に出します。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/sharyo/?demo">見本で動かす</a></div>
+    </article>
+    <article class="tool">
+      <h3>スタッフ連絡先</h3>
+      <p>職員の電話番号を探す・直すことができ、紙の名簿と同じ形でA4に印刷できます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/renraku/?demo">見本で動かす</a></div>
+    </article>
+  </section>
+
+  <section class="group">
+    <h2>そのまま使える</h2>
+    <p>ログインなしで使える道具です。入れた内容は、お使いのスマホの中だけに残ります。</p>
+    <article class="tool">
+      <h3>介護保険の費用計算</h3>
+      <p>サービスと回数を選ぶと、単位数と利用者さんの負担額、介護タクシーの料金を計算します。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/hiyou/">ひらく</a></div>
+    </article>
+    <article class="tool">
+      <h3>障害福祉の費用計算</h3>
+      <p>居宅介護・移動支援・介護タクシーの費用を計算し、利用者さんに渡す案内を印刷できます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/idoshien/">ひらく</a></div>
+    </article>
+    <article class="tool">
+      <h3>ガイドヘルパー報告書</h3>
+      <p>外出の記録を入れると、那覇市の様式の実績報告書を作って印刷できます。</p>
+      <p class="hint">「印刷の見本を見る」で、架空の利用者さんの記入例が見られます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/guide-houkoku/">ひらく</a></div>
+    </article>
+    <article class="tool">
+      <h3>ヒヤリハット・事故報告書</h3>
+      <p>スマホで書いて、A4の報告書として印刷できます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/hiyari/">ひらく</a></div>
+    </article>
+    <article class="tool">
+      <h3>ケア会議 議事録</h3>
+      <p>会議の記録を書くと、特定事業所加算に必要な項目が抜けていないかを知らせます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/gijiroku/">ひらく</a></div>
+    </article>
+    <article class="tool">
+      <h3>QRカード（名刺）</h3>
+      <p>QRコード入りの名刺を作って、名刺用紙に印刷したり画像で保存したりできます。</p>
+      <div class="links"><a class="open" href="https://kaigo-tools-3888d.web.app/qr-card/">ひらく</a></div>
+    </article>
+  </section>
+
+  <p class="foot">ほかの道具も含めた一覧は <a href="https://kaigo-tools-3888d.web.app/">ツール集（試し用）</a> で見られます。ログインが必要なものは、そこからは開けません。<br><label class="back-link" for="v-top" role="button" tabindex="0">入口にもどる</label></p>
+</main>
+</section>
+
+<section id="kousakushitsu">
+
+<div class="band">
+  <div class="inner">
+    <label class="back" for="v-top" role="button" tabindex="0">入口にもどる</label>
+    <h1>工作室</h1>
+    <p>仕事とは別に、「ネットがなくても動く」「カメラやマイクで遊べる」をテーマに作ったものです。</p>
+  </div>
+</div>
+
+<main class="ks-main">
+  <!-- 作品を足すときは .piece のかたまりを1つ複製し、名前・説明・リンクを書き換える -->
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <rect x="4" y="4" width="20" height="20"/><rect x="32" y="4" width="20" height="20"/><rect x="4" y="32" width="20" height="20"/>
+      <path d="M34 44v-6M40 48V34M46 44v-6"/>
+    </svg>
+    <h2>声のQR</h2>
+    <div>
+      <p>声やメロディをQRコードの中に入れておき、読み取るとその場で再生します。サーバーを使わないので、ネットがなくても聞けます。</p>
+      <ul class="needs"><li>マイク</li><li>カメラ</li><li>ネット不要</li></ul>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/koe-qr/">声のQRを試す</a>
+        <a class="code" href="https://github.com/yannsi/koe-qr">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <rect x="4" y="12" width="24" height="24"/><rect x="16" y="20" width="24" height="24" stroke-dasharray="4 3"/>
+      <rect x="28" y="28" width="24" height="24" stroke-dasharray="2 4"/>
+    </svg>
+    <h2>動くQR</h2>
+    <div>
+      <p>QRコードを次々に切り替えて表示し、1枚には入りきらない大きさのデータを、画面からカメラへ渡します。</p>
+      <ul class="needs"><li>カメラ</li><li>ネット不要</li></ul>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/ugoku-qr/">動くQRを試す</a>
+        <a class="code" href="https://github.com/yannsi/ugoku-qr">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <path d="M2 30h12l5-14 8 28 6-20 4 6h17"/>
+    </svg>
+    <h2>脈を見る</h2>
+    <div>
+      <p>スマホのカメラに指先を当てると、肌の色のわずかな変化から脈拍を読み取ります。</p>
+      <ul class="needs"><li>カメラ</li></ul>
+      <p class="caution">体験用の作品です。医療機器ではないので、健康の判断には使わないでください。</p>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/myaku-wo-miru/">脈を見るを試す</a>
+        <a class="code" href="https://github.com/yannsi/myaku-wo-miru">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <path d="M6 44c8-2 10-14 18-14s8 10 16 8 8-16 10-24" stroke-linecap="round"/>
+      <circle cx="50" cy="14" r="3" fill="currentColor"/>
+    </svg>
+    <h2>手で描く</h2>
+    <div>
+      <p>カメラが手の動きを読み取り、画面にさわらずに線を描けます。「フィジカルAI」を試す入口として作りました。</p>
+      <ul class="needs"><li>カメラ</li></ul>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/te-de-egaku/">手で描くを試す</a>
+        <a class="code" href="https://github.com/yannsi/te-de-egaku">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <rect x="4" y="8" width="48" height="36" rx="3"/><path d="M4 16h48"/>
+      <path d="M22 30l6 6 10-12" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h2>手でひらく</h2>
+    <div>
+      <p>「手で描く」の続きです。カメラに向けた手の形で、あらかじめ決めたサイトを開きます。</p>
+      <ul class="needs"><li>カメラ</li></ul>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/te-de-hiraku/">手でひらくを試す</a>
+        <a class="code" href="https://github.com/yannsi/te-de-hiraku">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="piece">
+    <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+      <rect x="4" y="8" width="48" height="42" rx="2"/><path d="M4 18h48M20 18v32M36 18v32M16 4v8M40 4v8"/>
+    </svg>
+    <h2>予定表メーカー</h2>
+    <div>
+      <p>大きな字の週間予定表を作って、印刷したり、リンクで共有したりできます。</p>
+      <ul class="needs"><li>印刷できます</li></ul>
+      <div class="links">
+        <a class="open" href="https://yannsi.github.io/yotei-hyo/">予定表メーカーを試す</a>
+        <a class="code" href="https://github.com/yannsi/yotei-hyo">コードを見る</a>
+      </div>
+    </div>
+  </article>
+
+  <p class="foot">ほかの作品も <a href="https://github.com/yannsi">github.com/yannsi</a> で公開しています。<br><label class="back-link" for="v-top" role="button" tabindex="0">入口にもどる</label></p>
+</main>
+</section>
+
+<script>
+  // なくても動く。URL末尾が #kousakushitsu なら工作室を表示し、切り替え時はページの先頭へ戻す
+  try{
+    if (location.hash === "#kousakushitsu") document.getElementById("v-ks").checked = true;
+    if (location.hash === "#tools") document.getElementById("v-tools").checked = true;
+    document.querySelectorAll(".view").forEach(function(r){
+      r.addEventListener("change", function(){ window.scrollTo(0,0); });
+    });
+    document.querySelectorAll('label[role="button"]').forEach(function(l){
+      l.addEventListener("keydown", function(e){
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); l.click(); }
+      });
+    });
+  }catch(e){}
+</script>
+</body>
+</html>
