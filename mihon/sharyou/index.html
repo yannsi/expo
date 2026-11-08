@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>車両管理表の見本</title>
+<meta name="description" content="社用車ごとの車検・保険・オイル交換を管理し、60日以内にやることを上に出す見本です。架空のデータで動きます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#1F2A33; --muted:#56636D; --line:#D9DED9;
+    --ai:#1E4E79; --ai-t:#1E4E79; --ai-soft:#E3ECF5;
+    --kiiro:#F2B705; --kiiro-soft:#FFF4CC; --kiiro-ink:#2A2100; --kiiro-t:#7A5A00;
+    --aka:#B3261E; --aka-soft:#FBE4E1; --dai:#9A4D00; --dai-soft:#FDEBD6;
+    --midori:#2E7D4F; --midori-soft:#E0F2E7; --track:#ECEFEA;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+      --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+      --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100; --kiiro-t:#F2C94C;
+      --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+      --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+    --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+    --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100; --kiiro-t:#F2C94C;
+    --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+    --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"BIZ UDPGothic","BIZ UDゴシック","Hiragino Sans","Yu Gothic UI",sans-serif;
+    font-size:17px; line-height:1.7;
+  }
+  button,input{font:inherit; color:inherit}
+  button{cursor:pointer}
+  .wrap{max-width:720px; margin:0 auto; padding:0 16px 48px}
+
+  .mihon{background:var(--kiiro); color:var(--kiiro-ink)}
+  .mihon .inner{max-width:720px; margin:0 auto; padding:8px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .mihon .tag{font-weight:700; background:var(--kiiro-ink); color:var(--kiiro); padding:1px 10px; border-radius:4px; margin-right:8px; font-size:15px}
+  .mihon p{margin:0; font-size:15px}
+  .mihon a{color:inherit; font-size:15px; font-weight:700; text-decoration:none; padding:6px 0}
+
+  header{padding:22px 0 6px}
+  h1{font-size:clamp(26px,7vw,36px); line-height:1.35; margin:0 0 8px}
+  .lead{margin:0; color:var(--muted)}
+  h2{font-size:21px; line-height:1.4; margin:0 0 4px}
+  .sub{margin:0 0 12px; color:var(--muted); font-size:15px}
+  section.block{margin-top:26px}
+
+  .guide{margin-top:18px; border:2px solid var(--ai); border-radius:8px; background:var(--card); padding:14px 16px}
+  .guide h2{font-size:18px; color:var(--ai-t); margin:0 0 6px}
+  .guide ol{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+  .guide li{display:flex; gap:10px; align-items:flex-start; font-size:16px; line-height:1.6}
+  .guide .num{flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:15px; background:var(--ai-soft); color:var(--ai-t); margin-top:1px}
+  .guide li.done .num{background:var(--midori); color:#fff}
+  .guide li.done .txt{color:var(--muted)}
+  .guide li.done .num::before{content:"✓"}
+  .guide li.done .num span{display:none}
+
+  /* 近いうちにやること */
+  .todo{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+  .todo li{background:var(--card); border:1px solid var(--line); border-left:6px solid var(--kiiro); border-radius:8px; padding:12px 14px; display:grid; grid-template-columns:1fr auto; gap:4px 12px; align-items:center}
+  .todo li.lv-red{border-left-color:var(--aka)}
+  .todo li.lv-orange{border-left-color:var(--dai)}
+  .todo li.in{animation:pop .7s ease}
+  @keyframes pop{0%{background:var(--kiiro-soft)}100%{background:var(--card)}}
+  .todo .what{font-weight:700; font-size:18px; line-height:1.4}
+  .todo .what small{font-weight:400; color:var(--muted); font-size:14px; margin-left:4px}
+  .todo .when{font-size:15px; color:var(--muted)}
+  .badge{display:inline-block; padding:1px 10px; border-radius:999px; font-size:14px; font-weight:700; margin-right:6px}
+  .badge.lv-red{background:var(--aka-soft); color:var(--aka)}
+  .badge.lv-orange{background:var(--dai-soft); color:var(--dai)}
+  .badge.lv-yellow{background:var(--kiiro-soft); color:var(--kiiro-t)}
+  .badge.lv-ok{background:var(--midori-soft); color:var(--midori)}
+  .done-btn{min-height:46px; padding:8px 14px; border-radius:999px; border:2px solid var(--ai); background:var(--card); color:var(--ai-t); font-weight:700; font-size:15px; white-space:nowrap}
+  .done-btn:hover{background:var(--ai-soft)}
+  .allclear{background:var(--midori-soft); color:var(--midori); font-weight:700; border-radius:8px; padding:14px}
+
+  /* 車ごと */
+  .cars{display:grid; gap:12px}
+  @media (min-width:640px){ .cars{grid-template-columns:1fr 1fr} }
+  .car{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px}
+  .car.hl{outline:3px solid var(--kiiro)}
+  .car h3{margin:0; font-size:19px; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap}
+  .car .kind{font-size:14px; color:var(--muted); font-weight:400}
+  .plate{display:inline-block; margin:6px 0 8px; border:2px solid var(--ink); border-radius:4px; padding:0 8px; font-size:14px; font-weight:700; letter-spacing:.04em}
+  dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:15px; line-height:1.5}
+  dt{color:var(--muted)}
+  dd{margin:0}
+  dd .badge{font-size:13px; padding:0 8px; margin:0 0 0 4px}
+  .km{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line)}
+  .km label{font-size:15px; color:var(--muted); width:100%}
+  .km input{width:96px; min-height:44px; border:2px solid var(--line); border-radius:8px; background:var(--paper); padding:4px 8px; font-size:17px; font-weight:700; text-align:right; font-variant-numeric:tabular-nums}
+  .km .u{font-size:15px}
+  .km button{min-height:44px; padding:6px 9px; border-radius:8px; border:2px solid var(--line); background:var(--paper); font-weight:700; font-size:15px}
+  .rule{font-size:14px; color:var(--muted); margin:10px 0 0}
+
+  .linkbtn{background:none; border:0; color:var(--ai-t); text-decoration:underline; font-size:15px; padding:8px 4px}
+  .note{margin-top:30px; padding:12px 14px; border-left:4px solid var(--line); color:var(--muted); font-size:15px}
+  .note p{margin:0 0 6px}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--kiiro); outline-offset:2px}
+
+  .toast{position:fixed; left:50%; bottom:22px; transform:translate(-50%,30px); opacity:0; background:var(--ink); color:var(--paper); padding:12px 18px; border-radius:10px; font-size:16px; font-weight:700; transition:.25s; pointer-events:none; max-width:calc(100% - 32px); text-align:center; z-index:10}
+  .toast.show{opacity:1; transform:translate(-50%,0)}
+  @media (prefers-reduced-motion: reduce){ .toast{transition:none} .todo li.in{animation:none} }
+</style>
+</head>
+<body>
+
+<div class="mihon">
+  <div class="inner">
+    <p><span class="tag">見本</span>架空のデータで動いています。さわっても保存されません。</p>
+    <a href="../../#tools">← ツール集にもどる</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <h1>車両管理表</h1>
+    <p class="lead">社用車ごとの車検・保険・オイル交換をまとめ、<b>60日以内にやること</b>を上に出します。うっかり期限を過ぎるのを防ぎます。</p>
+  </header>
+
+  <div class="guide" aria-live="polite">
+    <h2>やってみよう</h2>
+    <ol>
+      <li id="g1"><span class="num"><span>1</span></span><span class="txt">「近いうちにやること」のどれかで<b>「済みにした」</b>を押してみてください。次の期限が自動で入り、一覧から消えます。</span></li>
+      <li id="g2"><span class="num"><span>2</span></span><span class="txt">下の<b>2号車</b>の走行距離を「＋500km」で増やしてみてください。オイル交換が近づいて、上の一覧に出てきます。</span></li>
+    </ol>
+  </div>
+
+  <section class="block" aria-labelledby="h-todo">
+    <h2 id="h-todo">近いうちにやること</h2>
+    <p class="sub" id="today"></p>
+    <ul class="todo" id="todo" aria-live="polite"></ul>
+  </section>
+
+  <section class="block" aria-labelledby="h-cars">
+    <h2 id="h-cars">車ごとの一覧</h2>
+    <p class="sub">見本の決まり：オイル交換は <b>6か月</b> か <b>5,000km</b> の早いほう。車検は2年、任意保険は1年ごと。</p>
+    <div class="cars" id="cars"></div>
+  </section>
+
+  <div style="margin-top:20px"><button class="linkbtn" id="reset">最初の状態にもどす</button></div>
+
+  <div class="note">
+    <p>車・ナンバー・日付は、すべて架空の見本です。日付は、ひらいた日を「今日」として作っています。</p>
+    <p>実際の現場では、事務所の社用車をこの表で管理しています。</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var DAY = 86400000;
+  var WD = ["日","月","火","水","木","金","土"];
+  var OIL_DAYS = 182, OIL_KM = 5000, SOON = 60, KM_SOON = 500;
+  var T0 = new Date(); T0.setHours(0,0,0,0);
+  function addDays(d,n){ var x=new Date(d.getTime()); x.setDate(x.getDate()+n); return x; }
+  function addYears(d,n){ var x=new Date(d.getTime()); x.setFullYear(x.getFullYear()+n); return x; }
+  function diff(d){ return Math.round((d - T0)/DAY); }
+  function fmtD(d){ return (d.getFullYear()!==T0.getFullYear()? d.getFullYear()+"年":"")+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WD[d.getDay()]+"）"; }
+  function nf(n){ return n.toLocaleString("ja-JP"); }
+
+  function seed(){
+    return [
+      {name:"1号車", kind:"軽自動車（白）",       plate:"見本 あ 00-01", km:48210, shaken:addDays(T0,45),  nini:addDays(T0,150), oilDate:addDays(T0,-150), oilKm:44100},
+      {name:"2号車", kind:"福祉車両（スロープつき）", plate:"見本 い 00-02", km:64400, shaken:addDays(T0,210), nini:addDays(T0,20),  oilDate:addDays(T0,-40),  oilKm:60100},
+      {name:"3号車", kind:"軽自動車（青）",       plate:"見本 う 00-03", km:30550, shaken:addDays(T0,12),  nini:addDays(T0,280), oilDate:addDays(T0,-195), oilKm:27000},
+      {name:"4号車", kind:"普通車（送迎用）",     plate:"見本 え 00-04", km:91800, shaken:addDays(T0,420), nini:addDays(T0,58),  oilDate:addDays(T0,-60),  oilKm:89000}
+    ];
+  }
+  var cars, hl=-1, fresh={};
+
+  function level(days, kmLeft){
+    if (days<0 || (kmLeft!==undefined && kmLeft<=0)) return "red";
+    if (days<=14) return "red";
+    if (days<=30 || (kmLeft!==undefined && kmLeft<=KM_SOON)) return "orange";
+    if (days<=SOON) return "yellow";
+    return "ok";
+  }
+  function dayText(days){ return days<0 ? (-days)+"日過ぎています" : days===0 ? "今日まで" : "あと"+days+"日"; }
+
+  function oilInfo(c){
+    var due = addDays(c.oilDate, OIL_DAYS), days = diff(due), kmLeft = c.oilKm + OIL_KM - c.km;
+    var byKm = kmLeft<=KM_SOON && (kmLeft < days*40);
+    return {due:due, days:days, kmLeft:kmLeft, byKm:byKm, lv:level(days,kmLeft),
+      text: kmLeft<=0 ? nf(-kmLeft)+"km こえています" : byKm ? "あと"+nf(kmLeft)+"km" : dayText(days),
+      sort: Math.min(days, kmLeft<=KM_SOON ? kmLeft/50 : Infinity)};
+  }
+  function tasks(){
+    var list=[];
+    cars.forEach(function(c,i){
+      var s=diff(c.shaken), n=diff(c.nini), o=oilInfo(c);
+      list.push({i:i, t:"shaken", label:"車検", note:"自賠責も", date:c.shaken, lv:level(s), text:dayText(s), sort:s});
+      list.push({i:i, t:"nini", label:"任意保険の更新", date:c.nini, lv:level(n), text:dayText(n), sort:n});
+      list.push({i:i, t:"oil", label:"オイル交換", date:o.due, lv:o.lv, text:o.text, sort:o.sort, kmLeft:o.kmLeft, byKm:o.byKm});
+    });
+    return list.filter(function(x){ return x.lv!=="ok"; }).sort(function(a,b){ return a.sort-b.sort; });
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var toastTimer;
+  function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("show"); },3000); }
+
+  function render(){
+    $("today").textContent = "今日（"+fmtD(T0)+"）から60日以内に期限が来るもの、期限を過ぎたもの。近い順です。";
+    var L = tasks();
+    $("todo").innerHTML = L.length ? L.map(function(x){
+      var c=cars[x.i], key=x.i+x.t;
+      var when = x.t==="oil"
+        ? (x.byKm ? "目安 "+nf(c.oilKm+OIL_KM)+"km（今 "+nf(c.km)+"km）" : "目安 "+fmtD(x.date)+"・"+nf(c.oilKm+OIL_KM)+"km")
+        : "期限 "+fmtD(x.date);
+      return '<li class="lv-'+x.lv+(fresh[key]?' in':'')+'">'+
+        '<div><div class="what">'+c.name+'　'+x.label+(x.note?'<small>（'+x.note+'）</small>':'')+'</div>'+
+        '<div class="when"><span class="badge lv-'+x.lv+'">'+x.text+'</span>'+when+'</div></div>'+
+        '<button class="done-btn" data-done="'+x.i+'" data-t="'+x.t+'" aria-label="'+c.name+'の'+x.label+'を済みにした">済みにした</button>'+
+      '</li>';
+    }).join("") : '<li class="allclear" style="border:0">✓ 60日以内にやることはありません。</li>';
+
+    $("cars").innerHTML = cars.map(function(c,i){
+      var s=diff(c.shaken), n=diff(c.nini), o=oilInfo(c);
+      function b(lv,txt){ return lv==="ok" ? "" : '<span class="badge lv-'+lv+'">'+txt+'</span>'; }
+      return '<div class="car'+(hl===i?' hl':'')+'" id="car'+i+'">'+
+        '<h3>'+c.name+' <span class="kind">'+c.kind+'</span></h3>'+
+        '<div class="plate">'+c.plate+'</div>'+
+        '<dl>'+
+          '<dt>車検</dt><dd>'+fmtD(c.shaken)+b(level(s),dayText(s))+'</dd>'+
+          '<dt>任意保険</dt><dd>'+fmtD(c.nini)+b(level(n),dayText(n))+'</dd>'+
+          '<dt>前回オイル</dt><dd>'+fmtD(c.oilDate)+'・'+nf(c.oilKm)+'km</dd>'+
+          '<dt>次のオイル</dt><dd>'+fmtD(o.due)+' か '+nf(c.oilKm+OIL_KM)+'km'+b(o.lv,o.text)+'</dd>'+
+        '</dl>'+
+        '<div class="km"><label for="km'+i+'">今の走行距離</label>'+
+          '<input id="km'+i+'" type="number" inputmode="numeric" min="0" step="1" value="'+c.km+'" data-km="'+i+'"><span class="u">km</span>'+
+          '<button type="button" data-add="'+i+'" data-v="100">＋100km</button>'+
+          '<button type="button" data-add="'+i+'" data-v="500">＋500km</button>'+
+        '</div>'+
+      '</div>';
+    }).join("");
+    fresh = {};
+  }
+
+  function before(){ var m={}; tasks().forEach(function(x){ m[x.i+x.t]=1; }); return m; }
+  function markNew(prev){ tasks().forEach(function(x){ if(!prev[x.i+x.t]) fresh[x.i+x.t]=1; }); }
+
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest("button"); if (!btn) return;
+    if (btn.dataset.done!==undefined){
+      var i=+btn.dataset.done, t=btn.dataset.t, c=cars[i], msg;
+      if (t==="oil"){ c.oilDate=new Date(T0); c.oilKm=c.km; msg=c.name+"のオイル交換を記録しました。次は "+fmtD(addDays(T0,OIL_DAYS))+" か "+nf(c.km+OIL_KM)+"km"; }
+      if (t==="shaken"){ c.shaken=addYears(c.shaken,2); msg=c.name+"の車検を記録しました。次は "+fmtD(c.shaken); }
+      if (t==="nini"){ c.nini=addYears(c.nini,1); msg=c.name+"の任意保険を更新しました。次は "+fmtD(c.nini); }
+      $("g1").classList.add("done"); render(); toast(msg);
+      var next=document.querySelector(".done-btn"); if (next) next.focus();
+      return;
+    }
+    if (btn.dataset.add!==undefined){
+      var j=+btn.dataset.add, prev=before();
+      cars[j].km += +btn.dataset.v;
+      if (j===1 && oilInfo(cars[1]).kmLeft<=KM_SOON) $("g2").classList.add("done");
+      markNew(prev); var appeared=Object.keys(fresh).length>0; hl=j; render();
+      var again=document.querySelector('[data-add="'+j+'"][data-v="'+btn.dataset.v+'"]'); if (again) again.focus();
+      toast(appeared ? "上の「近いうちにやること」に、"+cars[j].name+"のオイル交換が出ました" : cars[j].name+"："+nf(cars[j].km)+"km");
+      return;
+    }
+  });
+  document.addEventListener("change", function(e){
+    var inp=e.target; if (inp.dataset.km===undefined) return;
+    var j=+inp.dataset.km, v=Math.round(+inp.value);
+    if (!(v>=0)) { render(); return; }
+    var prev=before(); cars[j].km=v;
+    if (j===1 && oilInfo(cars[1]).kmLeft<=KM_SOON) $("g2").classList.add("done");
+    markNew(prev); hl=j; render();
+  });
+  $("reset").addEventListener("click", function(){
+    cars=seed(); hl=-1; fresh={}; ["g1","g2"].forEach(function(id){ $(id).classList.remove("done"); });
+    render(); window.scrollTo(0,0); toast("最初の状態にもどしました");
+  });
+
+  cars=seed(); render();
+})();
+</script>
+</body>
+</html>

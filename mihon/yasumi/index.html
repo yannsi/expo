@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>休み希望の見本</title>
+<meta name="description" content="ヘルパーさんが休み希望を送ると、事務所の画面に届いて一覧とグラフで見られる見本です。架空のデータで動きます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#1F2A33; --muted:#56636D; --line:#D9DED9;
+    --ai:#1E4E79; --ai-t:#1E4E79; --ai-soft:#E3ECF5;
+    --kiiro:#F2B705; --kiiro-soft:#FFF4CC; --kiiro-ink:#2A2100;
+    --aka:#B3261E; --aka-soft:#FBE4E1; --dai:#9A4D00; --dai-soft:#FDEBD6;
+    --midori:#2E7D4F; --midori-soft:#E0F2E7; --track:#ECEFEA; --sun:#B3261E; --sat:#1E5FA8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+      --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+      --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100;
+      --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+      --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33; --sun:#F08A80; --sat:#8CB8E6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+    --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+    --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100;
+    --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+    --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33; --sun:#F08A80; --sat:#8CB8E6;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"BIZ UDPGothic","BIZ UDゴシック","Hiragino Sans","Yu Gothic UI",sans-serif;
+    font-size:17px; line-height:1.7;
+  }
+  button,input,select,textarea{font:inherit; color:inherit}
+  button{cursor:pointer}
+  .wrap{max-width:720px; margin:0 auto; padding:0 16px 48px}
+
+  .mihon{background:var(--kiiro); color:var(--kiiro-ink)}
+  .mihon .inner{max-width:720px; margin:0 auto; padding:8px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .mihon .tag{font-weight:700; background:var(--kiiro-ink); color:var(--kiiro); padding:1px 10px; border-radius:4px; margin-right:8px; font-size:15px}
+  .mihon p{margin:0; font-size:15px}
+  .mihon a{color:inherit; font-size:15px; font-weight:700; text-decoration:none; padding:6px 0}
+
+  header{padding:22px 0 6px}
+  h1{font-size:clamp(26px,7vw,36px); line-height:1.35; margin:0 0 8px}
+  .lead{margin:0; color:var(--muted)}
+  h2{font-size:21px; line-height:1.4; margin:0 0 4px}
+  h3{font-size:18px; margin:0 0 6px}
+  .sub{margin:0 0 12px; color:var(--muted); font-size:15px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; margin-top:14px}
+
+  .guide{margin-top:18px; border:2px solid var(--ai); border-radius:8px; background:var(--card); padding:14px 16px}
+  .guide h2{font-size:18px; color:var(--ai-t); margin:0 0 6px}
+  .guide ol{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+  .guide li{display:flex; gap:10px; align-items:flex-start; font-size:16px; line-height:1.6}
+  .guide .num{flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:15px; background:var(--ai-soft); color:var(--ai-t); margin-top:1px}
+  .guide li.done .num{background:var(--midori); color:#fff}
+  .guide li.done .txt{color:var(--muted)}
+  .guide li.done .num::before{content:"✓"}
+  .guide li.done .num span{display:none}
+
+  /* 画面の切りかえ */
+  .tabs{position:sticky; top:0; z-index:5; background:var(--paper); padding:12px 0 10px; margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .tabs button{min-height:56px; border-radius:8px; border:2px solid var(--ai); background:var(--card); color:var(--ai-t); font-weight:700; font-size:16px; line-height:1.3; padding:6px 8px}
+  .tabs button small{display:block; font-size:12px; font-weight:400; color:var(--muted)}
+  .tabs button[aria-selected="true"]{background:var(--ai); color:#fff}
+  .tabs button[aria-selected="true"] small{color:#DCE7F2}
+  .tabs .badge{display:inline-block; background:var(--aka); color:#fff; border-radius:999px; font-size:12px; padding:0 7px; margin-left:4px; vertical-align:2px}
+
+  /* ヘルパーの画面：スマホの枠 */
+  .phone{max-width:420px; margin:6px auto 0; background:var(--card); border:1px solid var(--line); border-radius:22px; padding:18px 14px; box-shadow:0 2px 0 var(--line)}
+  .phone .top{font-size:14px; color:var(--muted); text-align:center; margin-bottom:8px}
+  label.f{display:block; font-weight:700; font-size:15px; margin:10px 0 4px}
+  select{width:100%; min-height:48px; border:2px solid var(--line); border-radius:8px; background:var(--paper); padding:6px 10px; font-size:17px}
+  .kinds{display:flex; flex-wrap:wrap; gap:6px}
+  .kinds button{min-height:44px; padding:6px 12px; border-radius:999px; border:2px solid var(--line); background:var(--paper); font-weight:700; font-size:15px}
+  .kinds button[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--paper)}
+  .cal{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:10px}
+  .cal .wd{text-align:center; font-size:13px; color:var(--muted); font-weight:700}
+  .cal .wd.su{color:var(--sun)} .cal .wd.sa{color:var(--sat)}
+  .cal button{aspect-ratio:1/1.05; min-height:44px; border-radius:8px; border:1px solid var(--line); background:var(--paper); padding:2px 0 0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; font-size:15px; font-weight:700; line-height:1.2}
+  .cal button.su{color:var(--sun)} .cal button.sa{color:var(--sat)}
+  .cal button .mk{margin-top:3px; font-size:12px; padding:0 4px; border-radius:4px; color:#fff}
+  .cal button:disabled{opacity:.45; cursor:default}
+  .cal button.on{border-width:2px}
+  .mk.k-yasumi{background:var(--ai)} .mk.k-nenkyu{background:var(--midori)} .mk.k-am,.mk.k-pm{background:var(--dai)}
+  .cal button.on.k-yasumi{border-color:var(--ai)} .cal button.on.k-nenkyu{border-color:var(--midori)} .cal button.on.k-am,.cal button.on.k-pm{border-color:var(--dai)}
+  .count{margin:10px 0 0; font-size:15px; color:var(--muted)}
+  .btn{min-height:50px; padding:10px 20px; border-radius:999px; border:0; background:var(--ai); color:#fff; font-weight:700; font-size:17px; width:100%; margin-top:12px}
+  .btn:disabled{opacity:.45; cursor:default}
+  .btn.ghost{background:transparent; color:var(--ai-t); border:2px solid var(--ai)}
+  .btn.small{width:auto; min-height:46px; font-size:16px; margin-top:0}
+  .btn.line-green{background:#06C755}
+  .sent{margin-top:12px; background:var(--midori-soft); color:var(--midori); border-radius:8px; padding:12px; font-weight:700}
+  .sent p{margin:0 0 8px; color:var(--ink); font-weight:400; font-size:15px}
+  .hint{font-size:14px; color:var(--muted); margin:8px 0 0}
+
+  /* 事務所の画面 */
+  .office-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .progress{height:12px; background:var(--track); border-radius:6px; overflow:hidden; margin:8px 0 10px}
+  .progress i{display:block; height:100%; background:var(--midori); transition:width .4s}
+  .people{display:flex; flex-wrap:wrap; gap:6px; list-style:none; margin:0; padding:0}
+  .people li{padding:4px 12px; border-radius:999px; font-size:15px; font-weight:700}
+  .people li.ok{background:var(--midori-soft); color:var(--midori)}
+  .people li.not{background:var(--aka-soft); color:var(--aka)}
+  .people li.new{outline:3px solid var(--kiiro)}
+  textarea.msg{width:100%; min-height:132px; border:1px solid var(--line); border-radius:8px; background:var(--paper); padding:10px 12px; font-size:15px; line-height:1.6; resize:vertical; margin-top:6px}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:8px}
+
+  .chart{position:relative; height:150px; display:grid; gap:2px; align-items:end; padding-top:6px}
+  .bar{position:relative; background:var(--ai); border-radius:3px 3px 0 0; min-height:2px; transition:height .4s}
+  .bar.over{background:var(--aka)}
+  .bar.zero{background:var(--line)}
+  .limit{position:absolute; left:0; right:0; border-top:2px dashed var(--aka); pointer-events:none}
+  .limit span{position:absolute; right:0; top:-20px; font-size:12px; color:var(--aka); font-weight:700; background:var(--card); padding:0 4px}
+  .xlab{display:grid; gap:2px; font-size:11px; color:var(--muted); text-align:center; margin-top:3px}
+  .xlab .su{color:var(--sun); font-weight:700}
+  .warnlist{margin:10px 0 0; padding:10px 12px; border-radius:8px; font-size:15px}
+  .warnlist.ng{background:var(--aka-soft); color:var(--aka); font-weight:700}
+  .warnlist.ok{background:var(--midori-soft); color:var(--midori); font-weight:700}
+
+  .tablewrap{overflow-x:auto; margin-top:6px; border:1px solid var(--line); border-radius:8px}
+  table{border-collapse:collapse; font-size:13px; min-width:100%}
+  th,td{border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:center; padding:0; height:34px; min-width:26px}
+  thead th{background:var(--paper); font-weight:700; position:sticky; top:0}
+  th.nm{position:sticky; left:0; background:var(--card); z-index:1; text-align:left; padding:0 8px; min-width:92px; white-space:nowrap; font-size:14px}
+  thead th.nm{background:var(--paper); z-index:2}
+  th.su{color:var(--sun)} th.sa{color:var(--sat)}
+  td.over-col{background:var(--aka-soft)}
+  td .c{display:inline-block; min-width:20px; border-radius:3px; color:#fff; font-weight:700; padding:0 2px}
+  td .c.k-yasumi{background:var(--ai)} td .c.k-nenkyu{background:var(--midori)} td .c.k-am,td .c.k-pm{background:var(--dai)}
+  tr.notyet td{color:var(--muted); font-size:12px}
+  tr.fresh th.nm{box-shadow:inset 4px 0 0 var(--kiiro)}
+  .legend{display:flex; gap:12px; flex-wrap:wrap; font-size:13px; color:var(--muted); margin-top:8px}
+  .legend b{display:inline-block; color:#fff; border-radius:3px; padding:0 4px; margin-right:3px; font-size:12px}
+  .imported{margin:8px 0 0; font-size:15px; color:var(--midori); font-weight:700}
+
+  .linkbtn{background:none; border:0; color:var(--ai-t); text-decoration:underline; font-size:15px; padding:8px 4px}
+  .note{margin-top:30px; padding:12px 14px; border-left:4px solid var(--line); color:var(--muted); font-size:15px}
+  .note p{margin:0 0 6px}
+  button:focus-visible,select:focus-visible{outline:3px solid var(--kiiro); outline-offset:2px}
+
+  .toast{position:fixed; left:50%; bottom:22px; transform:translate(-50%,30px); opacity:0; background:var(--ink); color:var(--paper); padding:12px 18px; border-radius:10px; font-size:16px; font-weight:700; transition:.25s; pointer-events:none; max-width:calc(100% - 32px); text-align:center; z-index:10}
+  .toast.show{opacity:1; transform:translate(-50%,0)}
+  [hidden]{display:none !important}
+  @media (prefers-reduced-motion: reduce){ .toast,.bar,.progress i{transition:none} }
+</style>
+</head>
+<body>
+
+<div class="mihon">
+  <div class="inner">
+    <p><span class="tag">見本</span>架空のデータで動いています。さわっても保存されません。</p>
+    <a href="../../#tools">← ツール集にもどる</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <h1>休み希望</h1>
+    <p class="lead">ヘルパーさんがスマホから休みの希望を送ると、事務所の画面にすぐ届きます。だれがまだ出していないか、人が足りなくなる日はどこかも、ひと目でわかります。</p>
+  </header>
+
+  <div class="guide" aria-live="polite">
+    <h2>やってみよう</h2>
+    <ol>
+      <li id="g1"><span class="num"><span>1</span></span><span class="txt">ヘルパーさんの画面で、<b>まだ出していない人</b>（見本 みなみ さんなど）を選びます。</span></li>
+      <li id="g2"><span class="num"><span>2</span></span><span class="txt">日付を押して休みを入れ、<b>「事務所に送る」</b>を押します。<b id="hotday">24日</b>に入れると、何かが起きます。</span></li>
+      <li id="g3"><span class="num"><span>3</span></span><span class="txt"><b>事務所の画面</b>に切りかえて、届いたか見てみます。</span></li>
+      <li id="g4"><span class="num"><span>4</span></span><span class="txt">まだの人に送る<b>お知らせ文</b>をコピーしてみます。</span></li>
+    </ol>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="画面の切りかえ">
+    <button role="tab" id="tab-h" aria-controls="pane-h" aria-selected="true">ヘルパーさんの画面<small>スマホで出す</small></button>
+    <button role="tab" id="tab-o" aria-controls="pane-o" aria-selected="false">事務所の画面<span class="badge" id="newbadge" hidden>新着</span><small>届いたものを見る</small></button>
+  </div>
+
+  <!-- ヘルパーさんの画面 -->
+  <section id="pane-h" role="tabpanel" aria-labelledby="tab-h">
+    <div class="phone">
+      <div class="top" id="phoneTop"></div>
+      <label class="f" for="who">あなたの名前</label>
+      <select id="who"></select>
+
+      <div id="form" hidden>
+        <label class="f" id="lbl-kind">入れる休みの種類</label>
+        <div class="kinds" role="group" aria-labelledby="lbl-kind" id="kinds"></div>
+        <div class="cal" id="cal" aria-label="日付"></div>
+        <p class="count" id="count"></p>
+        <button class="btn" id="send">事務所に送る</button>
+        <div class="sent" id="sent" hidden>
+          ✓ 事務所に届きました
+          <p>見本なので、ほんとうには送っていません。事務所の画面で届いたところを見てみてください。</p>
+          <button class="btn ghost small" id="goOffice">事務所の画面を見る →</button>
+        </div>
+      </div>
+      <p class="hint" id="pickHint">名前を選ぶと、カレンダーが出ます。</p>
+    </div>
+  </section>
+
+  <!-- 事務所の画面 -->
+  <section id="pane-o" role="tabpanel" aria-labelledby="tab-o" hidden>
+    <div class="card">
+      <div class="office-head"><h3>出した人・まだの人</h3><span id="ratio" style="font-weight:700"></span></div>
+      <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+      <ul class="people" id="people"></ul>
+      <div id="remindBox">
+        <label class="f" for="remind" style="margin-top:14px">まだの人へのお知らせ文</label>
+        <textarea class="msg" id="remind" readonly></textarea>
+        <div class="actions"><button class="btn line-green small" id="copy">お知らせ文をコピー</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>日ごとの休みの人数</h3>
+      <p class="sub" style="margin-bottom:4px">見本の決まり：1日に休めるのは<b>2人まで</b>（半休は0.5人）。こえた日は赤になります。</p>
+      <div class="chart" id="chart" role="img"></div>
+      <div class="xlab" id="xlab" aria-hidden="true"></div>
+      <div id="warn"></div>
+    </div>
+
+    <div class="card">
+      <h3>一覧</h3>
+      <p class="sub" style="margin-bottom:4px">横に動かすと月末まで見られます。</p>
+      <div class="tablewrap"><table id="table"></table></div>
+      <div class="legend"><span><b style="background:var(--ai)">休</b>希望休</span><span><b style="background:var(--midori)">年</b>年休</span><span><b style="background:var(--dai)">前</b>午前休</span><span><b style="background:var(--dai)">後</b>午後休</span></div>
+      <div class="actions" style="margin-top:12px"><button class="btn small" id="import">勤務表に取り込む</button></div>
+      <p class="imported" id="imported" hidden></p>
+    </div>
+  </section>
+
+  <div class="actions" style="margin-top:20px"><button class="linkbtn" id="reset">最初の状態にもどす</button></div>
+
+  <div class="note">
+    <p>名前と休みの希望は、すべて架空の見本です。</p>
+    <p>実際の現場では、ヘルパーさんがLINEからこの画面を開いて、翌月の希望を出しています。</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var KINDS = [
+    {k:"yasumi", label:"休", full:"希望休", w:1},
+    {k:"nenkyu", label:"年", full:"年休",   w:1},
+    {k:"am",     label:"前", full:"午前休", w:.5},
+    {k:"pm",     label:"後", full:"午後休", w:.5}
+  ];
+  var KMAP = {}; KINDS.forEach(function(x){ KMAP[x.k]=x; });
+  var LIMIT = 2;
+  var WD = ["日","月","火","水","木","金","土"];
+
+  // 来月を対象にする
+  var now = new Date();
+  var Y = now.getFullYear(), M = now.getMonth()+1; // 来月（0始まりの今月+1）
+  if (M>11){ Y++; M=0; }
+  var DAYS_IN = new Date(Y, M+1, 0).getDate();
+  var MONTH_LABEL = (M+1)+"月";
+  function wd(d){ return new Date(Y, M, d).getDay(); }
+
+  function seed(){
+    return [
+      {name:"見本 さくら", done:true,  days:{5:"yasumi",12:"yasumi",24:"nenkyu",26:"yasumi"}},
+      {name:"試し ゆうな", done:true,  days:{6:"yasumi",13:"am",24:"yasumi",30:"yasumi"}},
+      {name:"那覇 ひろし", done:true,  days:{1:"yasumi",12:"yasumi",19:"nenkyu",20:"yasumi"}},
+      {name:"見本 みなみ", done:false, days:{}},
+      {name:"首里 けんた", done:false, days:{}},
+      {name:"試し あやか", done:true,  days:{7:"yasumi",14:"pm",21:"yasumi",28:"yasumi"}}
+    ];
+  }
+  var S;
+  function init(){
+    S = {people:seed(), who:-1, kind:"yasumi", draft:{}, sentNow:false, fresh:-1, imported:false, tab:"h"};
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var toastTimer;
+  function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("show"); },2600); }
+  function done(id){ $(id).classList.add("done"); }
+  function copyText(text){
+    if (navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text).then(function(){return true;}, function(){ return fb(); });
+    }
+    return Promise.resolve(fb());
+    function fb(){ var ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); var ok=false; try{ok=document.execCommand("copy");}catch(e){} ta.remove(); return ok; }
+  }
+  function dayLabel(d){ return d+"日（"+WD[wd(d)]+"）"; }
+
+  // ---------- ヘルパーさんの画面 ----------
+  function renderHelper(){
+    $("phoneTop").textContent = MONTH_LABEL+"の休み希望（今月20日まで）";
+    var opts = '<option value="-1">選んでください</option>' + S.people.map(function(p,i){
+      return '<option value="'+i+'"'+(S.who===i?' selected':'')+'>'+p.name+(p.done?'（出しています）':'')+'</option>';
+    }).join("");
+    $("who").innerHTML = opts;
+
+    var has = S.who>=0;
+    $("form").hidden = !has; $("pickHint").hidden = has;
+    if (!has) return;
+
+    $("kinds").innerHTML = KINDS.map(function(x){
+      return '<button type="button" data-kind="'+x.k+'" aria-pressed="'+(S.kind===x.k)+'">'+x.full+'</button>';
+    }).join("") + '<button type="button" data-kind="clear" aria-pressed="'+(S.kind==="clear")+'">消す</button>';
+
+    var h = WD.map(function(w,i){ return '<div class="wd'+(i===0?' su':i===6?' sa':'')+'">'+w+'</div>'; }).join("");
+    for (var b=0;b<wd(1);b++) h += '<div></div>';
+    for (var d=1; d<=DAYS_IN; d++){
+      var k = S.draft[d], w = wd(d);
+      h += '<button type="button" data-day="'+d+'" class="'+(w===0?'su ':w===6?'sa ':'')+(k?'on k-'+k:'')+'" aria-label="'+dayLabel(d)+(k?' '+KMAP[k].full:'')+'">'+d+(k?'<span class="mk k-'+k+'">'+KMAP[k].label+'</span>':'')+'</button>';
+    }
+    $("cal").innerHTML = h;
+
+    var cnt = {}; var keys = Object.keys(S.draft);
+    keys.forEach(function(d){ var k=S.draft[d]; cnt[k]=(cnt[k]||0)+1; });
+    $("count").textContent = keys.length ? "入れた休み： " + KINDS.filter(function(x){return cnt[x.k];}).map(function(x){ return x.full+" "+cnt[x.k]+"日"; }).join("・") : "日付を押すと、選んだ種類の休みが入ります。";
+    $("send").disabled = !keys.length;
+    $("send").textContent = S.people[S.who].done && !S.sentNow ? "出し直す（事務所に送る）" : "事務所に送る";
+    $("sent").hidden = !S.sentNow;
+  }
+
+  // ---------- 事務所の画面 ----------
+  function counts(){
+    var c = []; for (var d=1; d<=DAYS_IN; d++) c[d]=0;
+    S.people.forEach(function(p){ if (!p.done) return; Object.keys(p.days).forEach(function(d){ c[d]+=KMAP[p.days[d]].w; }); });
+    return c;
+  }
+  function renderOffice(){
+    var n = S.people.length, ok = S.people.filter(function(p){return p.done;}).length;
+    $("ratio").textContent = n+"人中 "+ok+"人";
+    $("bar").style.width = (ok/n*100)+"%";
+    $("people").innerHTML = S.people.map(function(p,i){
+      return '<li class="'+(p.done?'ok':'not')+(S.fresh===i?' new':'')+'">'+(p.done?'✓ ':'')+p.name+(p.done?'':'（まだ）')+'</li>';
+    }).join("");
+
+    var not = S.people.filter(function(p){return !p.done;});
+    $("remindBox").hidden = !not.length;
+    $("remind").value = not.map(function(p){return p.name+"さん";}).join("、")+"\n"+MONTH_LABEL+"の休み希望が、まだ届いていません。今月20日までに、いつものLINEのリンクから送ってください。\n（出してくれた方、ありがとうございます）";
+
+    // グラフ
+    var c = counts(), max = 4, cols = "repeat("+DAYS_IN+",1fr)";
+    var bars = "", labs = "", over = [];
+    for (var d=1; d<=DAYS_IN; d++){
+      var v=c[d], cls = v>LIMIT ? "over" : v===0 ? "zero" : "";
+      if (v>LIMIT) over.push(d);
+      bars += '<div class="bar '+cls+'" style="height:'+(Math.max(v,0.05)/max*100)+'%" title="'+dayLabel(d)+' '+v+'人"></div>';
+      labs += '<span class="'+(wd(d)===0?'su':'')+'">'+((d===1||d%5===0)?d:(wd(d)===0?'･':''))+'</span>';
+    }
+    bars += '<div class="limit" style="bottom:'+(LIMIT/max*100)+'%"><span>2人</span></div>';
+    $("chart").style.gridTemplateColumns = cols; $("xlab").style.gridTemplateColumns = cols;
+    $("chart").innerHTML = bars; $("xlab").innerHTML = labs;
+    $("chart").setAttribute("aria-label", "日ごとの休みの人数。"+(over.length? over.map(dayLabel).join("、")+"が2人をこえています。" : "2人をこえる日はありません。"));
+    $("warn").innerHTML = over.length
+      ? '<div class="warnlist ng">！ 人が足りなくなりそうな日：'+over.map(function(d){return dayLabel(d)+" "+c[d]+"人";}).join("、")+'<br><span style="font-weight:400;color:var(--ink)">→ 本人と相談して、ほかの日に変えてもらえるか聞きます。</span></div>'
+      : '<div class="warnlist ok">✓ 2人をこえる日はありません。</div>';
+
+    // 一覧表
+    var th = '<thead><tr><th class="nm">名前</th>';
+    for (var d2=1; d2<=DAYS_IN; d2++){ var w=wd(d2); th += '<th class="'+(w===0?'su':w===6?'sa':'')+'">'+d2+'<br>'+WD[w]+'</th>'; }
+    th += '</tr></thead><tbody>';
+    S.people.forEach(function(p,i){
+      th += '<tr class="'+(p.done?'':'notyet')+(S.fresh===i?' fresh':'')+'"><th class="nm">'+p.name+'</th>';
+      for (var d3=1; d3<=DAYS_IN; d3++){
+        var k = p.done ? p.days[d3] : null;
+        var oc = c[d3]>LIMIT ? ' class="over-col"' : '';
+        th += '<td'+oc+'>'+(k?'<span class="c k-'+k+'">'+KMAP[k].label+'</span>':(p.done?'':(d3===1?'まだ':'')))+'</td>';
+      }
+      th += '</tr>';
+    });
+    $("table").innerHTML = th + '</tbody>';
+    $("imported").hidden = !S.imported;
+  }
+
+  function setTab(t){
+    S.tab = t;
+    $("tab-h").setAttribute("aria-selected", t==="h"); $("tab-o").setAttribute("aria-selected", t==="o");
+    $("pane-h").hidden = t!=="h"; $("pane-o").hidden = t!=="o";
+    if (t==="o"){
+      $("newbadge").hidden = true;
+      if ($("g2").classList.contains("done")) done("g3");
+      renderOffice();
+    } else renderHelper();
+  }
+
+  // ---------- 操作 ----------
+  $("who").addEventListener("change", function(){
+    S.who = +this.value; S.sentNow=false;
+    S.draft = S.who>=0 ? JSON.parse(JSON.stringify(S.people[S.who].days)) : {};
+    if (S.who>=0) done("g1");
+    renderHelper();
+  });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.kind){ S.kind=b.dataset.kind; renderHelper(); var nb=document.querySelector('[data-kind="'+S.kind+'"]'); if(nb) nb.focus(); return; }
+    if (b.dataset.day){
+      var d=+b.dataset.day;
+      if (S.kind==="clear" || S.draft[d]===S.kind) delete S.draft[d]; else S.draft[d]=S.kind;
+      S.sentNow=false; renderHelper();
+      var nd=document.querySelector('[data-day="'+d+'"]'); if (nd) nd.focus();
+      return;
+    }
+  });
+  $("send").addEventListener("click", function(){
+    var p = S.people[S.who];
+    p.days = JSON.parse(JSON.stringify(S.draft)); p.done = true;
+    S.sentNow = true; S.fresh = S.who; S.imported=false;
+    $("newbadge").hidden = false; done("g2");
+    renderHelper(); toast("事務所に届きました（見本なので保存はしません）");
+  });
+  $("goOffice").addEventListener("click", function(){ setTab("o"); $("tab-o").scrollIntoView({block:"start"}); });
+  $("tab-h").addEventListener("click", function(){ setTab("h"); });
+  $("tab-o").addEventListener("click", function(){ setTab("o"); });
+  document.querySelector(".tabs").addEventListener("keydown", function(e){
+    if (e.key==="ArrowRight"||e.key==="ArrowLeft"){ var t=S.tab==="h"?"o":"h"; setTab(t); $("tab-"+t).focus(); }
+  });
+  $("copy").addEventListener("click", function(){
+    copyText($("remind").value).then(function(ok){ done("g4"); toast(ok?"コピーしました。LINEに貼り付けて送れます":"選んでコピーしてください"); if(!ok){$("remind").focus();$("remind").select();} });
+  });
+  $("import").addEventListener("click", function(){
+    S.imported = true;
+    var t=new Date(); $("imported").textContent = "✓ 勤務表に取り込みました（"+t.getHours()+"時"+(t.getMinutes()<10?"0":"")+t.getMinutes()+"分）。見本なので、ほんとうの勤務表は変わりません。";
+    renderOffice(); toast("勤務表に取り込みました");
+  });
+  $("reset").addEventListener("click", function(){
+    init(); ["g1","g2","g3","g4"].forEach(function(id){ $(id).classList.remove("done"); });
+    $("newbadge").hidden=true; setTab("h"); window.scrollTo(0,0); toast("最初の状態にもどしました");
+  });
+
+  $("hotday").textContent = dayLabel(24);
+  init(); setTab("h");
+})();
+</script>
+</body>
+</html>

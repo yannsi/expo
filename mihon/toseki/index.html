@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>透析と送迎の見本</title>
+<meta name="description" content="透析が終わる時間から、お迎えの時間と車ごとの回り方を組み、LINEで送る文を作る見本です。架空のデータで動きます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#1F2A33; --muted:#56636D; --line:#D9DED9;
+    --ai:#1E4E79; --ai-t:#1E4E79; --ai-soft:#E3ECF5;
+    --kiiro:#F2B705; --kiiro-soft:#FFF4CC; --kiiro-ink:#2A2100;
+    --aka:#B3261E; --aka-soft:#FBE4E1; --dai:#9A4D00; --dai-soft:#FDEBD6;
+    --midori:#2E7D4F; --midori-soft:#E0F2E7; --track:#ECEFEA;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+      --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+      --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100;
+      --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+      --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141A1F; --card:#1C242B; --ink:#E9EEF0; --muted:#A3AFB7; --line:#2B353D;
+    --ai:#2C6599; --ai-t:#8CB8E6; --ai-soft:#1D3347;
+    --kiiro:#E5AD00; --kiiro-soft:#3A3010; --kiiro-ink:#2A2100;
+    --aka:#F08A80; --aka-soft:#3D1F1C; --dai:#F0A860; --dai-soft:#3A2814;
+    --midori:#7CCB9C; --midori-soft:#173325; --track:#222C33;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"BIZ UDPGothic","BIZ UDゴシック","Hiragino Sans","Yu Gothic UI",sans-serif;
+    font-size:17px; line-height:1.7;
+  }
+  button,input,select,textarea{font:inherit; color:inherit}
+  button{cursor:pointer}
+  .wrap{max-width:720px; margin:0 auto; padding:0 16px 48px}
+
+  /* 見本の帯 */
+  .mihon{background:var(--kiiro); color:var(--kiiro-ink)}
+  .mihon .inner{max-width:720px; margin:0 auto; padding:8px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .mihon .tag{font-weight:700; background:var(--kiiro-ink); color:var(--kiiro); padding:1px 10px; border-radius:4px; margin-right:8px; font-size:15px}
+  .mihon p{margin:0; font-size:15px}
+  .mihon a{color:inherit; font-size:15px; font-weight:700; text-decoration:none; padding:6px 0}
+
+  header{padding:22px 0 6px}
+  h1{font-size:clamp(26px,7vw,36px); line-height:1.35; margin:0 0 8px}
+  .lead{margin:0; color:var(--muted)}
+
+  h2{font-size:21px; line-height:1.4; margin:0 0 4px}
+  .sub{margin:0 0 14px; color:var(--muted); font-size:15px}
+  section.block{margin-top:26px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px}
+
+  /* やってみよう */
+  .guide{margin-top:18px; border:2px solid var(--ai); border-radius:8px; background:var(--card); padding:14px 16px}
+  .guide h2{font-size:18px; color:var(--ai-t); margin:0 0 6px}
+  .guide ol{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+  .guide li{display:flex; gap:10px; align-items:flex-start; font-size:16px; line-height:1.6}
+  .guide .num{flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:15px; background:var(--ai-soft); color:var(--ai-t); margin-top:1px}
+  .guide li.done .num{background:var(--midori); color:#fff}
+  .guide li.done .txt{color:var(--muted)}
+  .guide li.done .num::before{content:"✓"}
+  .guide li.done .num span{display:none}
+
+  /* 切りかえ */
+  .seg{display:flex; gap:6px; flex-wrap:wrap}
+  .seg button{
+    min-height:44px; padding:8px 16px; border-radius:999px; border:2px solid var(--line);
+    background:var(--card); font-weight:700; font-size:16px;
+  }
+  .seg button[aria-pressed="true"]{background:var(--ai); border-color:var(--ai); color:#fff}
+  .row-ctl{display:flex; gap:12px 18px; flex-wrap:wrap; align-items:center}
+  .row-ctl .lbl{font-size:15px; color:var(--muted); font-weight:700}
+
+  /* お迎えの一覧 */
+  .pts{display:grid; gap:10px}
+  .pt{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; display:grid; grid-template-columns:1fr auto; gap:6px 10px; align-items:center}
+  .pt.flash{animation:flash .9s ease}
+  @keyframes flash{0%{background:var(--kiiro-soft)}100%{background:var(--card)}}
+  .pt .name{font-weight:700; font-size:18px}
+  .pt .where{font-size:14px; color:var(--muted)}
+  .stepper{display:flex; align-items:center; gap:4px}
+  .stepper button{width:44px; height:44px; border-radius:8px; border:2px solid var(--line); background:var(--paper); font-size:22px; font-weight:700; line-height:1}
+  .stepper .t{min-width:58px; text-align:center; font-weight:700; font-size:19px; font-variant-numeric:tabular-nums}
+  .stepper .cap{display:block; font-size:12px; color:var(--muted); font-weight:400; line-height:1.2}
+  .pt .res{grid-column:1 / -1; display:flex; gap:8px; flex-wrap:wrap; align-items:center; font-size:15px; border-top:1px dashed var(--line); padding-top:8px}
+  .chip{display:inline-block; padding:1px 10px; border-radius:999px; font-size:14px; font-weight:700}
+  .chip.car{background:var(--ai-soft); color:var(--ai-t)}
+  .chip.ok{background:var(--midori-soft); color:var(--midori)}
+  .chip.wait{background:var(--aka-soft); color:var(--aka)}
+
+  /* 結果のまとめ */
+  .verdict{margin-top:14px; border-radius:8px; padding:12px 14px; font-weight:700; display:flex; gap:10px; align-items:flex-start}
+  .verdict.ok{background:var(--midori-soft); color:var(--midori)}
+  .verdict.ng{background:var(--aka-soft); color:var(--aka)}
+  .verdict small{display:block; font-weight:400; color:var(--ink); font-size:15px; margin-top:2px}
+  .verdict .ic{font-size:20px; line-height:1.3}
+
+  /* 時間の帯 */
+  .tl{margin-top:4px}
+  .tl-axis,.tl-row{display:grid; grid-template-columns:46px 1fr; gap:8px; align-items:center}
+  .tl-row{margin-top:8px}
+  .tl-row .who{font-weight:700; font-size:15px}
+  .track{position:relative; height:40px; background:var(--track); border-radius:6px}
+  .axis{position:relative; height:20px; font-size:12px; color:var(--muted)}
+  .axis span{position:absolute; transform:translateX(-50%); white-space:nowrap}
+  .grid-line{position:absolute; top:0; bottom:0; width:1px; background:var(--line)}
+  .blk{position:absolute; top:5px; bottom:5px; border-radius:4px; background:var(--ai); color:#fff; font-size:12px; font-weight:700; overflow:hidden; white-space:nowrap; padding:0 4px; display:flex; align-items:center; justify-content:center; min-width:4px}
+  .blk.late{box-shadow:inset 0 0 0 3px var(--aka)}
+  .drive{position:absolute; top:17px; height:6px; border-radius:3px; background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px); opacity:.6}
+  .legend{display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--muted); margin-top:10px}
+  .legend i{display:inline-block; width:18px; height:10px; border-radius:2px; vertical-align:middle; margin-right:4px}
+
+  /* 車ごと */
+  .cars{display:grid; gap:12px; margin-top:16px}
+  @media (min-width:640px){ .cars{grid-template-columns:1fr 1fr} }
+  .carcard h3{margin:0 0 8px; font-size:17px; display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap}
+  .carcard h3 small{font-weight:400; color:var(--muted); font-size:14px}
+  .stops{list-style:none; margin:0; padding:0}
+  .stops li{display:grid; grid-template-columns:52px 1fr; gap:8px; padding:6px 0; border-top:1px solid var(--line); font-size:15px; line-height:1.5}
+  .stops li:first-child{border-top:0}
+  .stops .tm{font-weight:700; font-variant-numeric:tabular-nums}
+  .stops .late{color:var(--aka); font-weight:700}
+  .empty{color:var(--muted); font-size:15px; margin:0}
+
+  /* LINE */
+  textarea.line{width:100%; min-height:240px; border:1px solid var(--line); border-radius:8px; background:var(--paper); padding:12px; font-size:15px; line-height:1.6; resize:vertical}
+  .btn{min-height:48px; padding:10px 20px; border-radius:999px; border:0; background:var(--ai); color:#fff; font-weight:700; font-size:17px}
+  .btn.line-green{background:#06C755; color:#fff}
+  .btn:focus-visible,.seg button:focus-visible,.stepper button:focus-visible{outline:3px solid var(--kiiro); outline-offset:2px}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; align-items:center}
+  .linkbtn{background:none; border:0; color:var(--ai-t); text-decoration:underline; font-size:15px; padding:8px 4px}
+
+  .note{margin-top:30px; padding:12px 14px; border-left:4px solid var(--line); color:var(--muted); font-size:15px}
+  .note p{margin:0 0 6px}
+
+  .toast{position:fixed; left:50%; bottom:22px; transform:translate(-50%,30px); opacity:0; background:var(--ink); color:var(--paper); padding:12px 18px; border-radius:10px; font-size:16px; font-weight:700; transition:.25s; pointer-events:none; max-width:calc(100% - 32px); text-align:center; z-index:10}
+  .toast.show{opacity:1; transform:translate(-50%,0)}
+  @media (prefers-reduced-motion: reduce){ .toast{transition:none} .pt.flash{animation:none} }
+</style>
+</head>
+<body>
+
+<div class="mihon">
+  <div class="inner">
+    <p><span class="tag">見本</span>架空のデータで動いています。さわっても保存されません。</p>
+    <a href="../../#tools">← ツール集にもどる</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <h1>透析のお迎えと<br>送迎の組み方</h1>
+    <p class="lead">透析が終わる時間を入れると、お迎えの時間と車ごとの回り方を組み、ヘルパーさんに送るLINEの文まで作ります。</p>
+  </header>
+
+  <div class="guide" aria-live="polite">
+    <h2>やってみよう</h2>
+    <ol>
+      <li id="g1"><span class="num"><span>1</span></span><span class="txt">だれかの<b>終わる時間</b>を「＋」で遅らせてみてください。車の回り方がすぐ組み直されます。</span></li>
+      <li id="g2"><span class="num"><span>2</span></span><span class="txt"><b>車の台数</b>を減らしてみてください。間に合わない人がいると、赤で知らせます。</span></li>
+      <li id="g3"><span class="num"><span>3</span></span><span class="txt">いちばん下の<b>LINEで送る文</b>をコピーしてみてください。</span></li>
+    </ol>
+  </div>
+
+  <section class="block">
+    <div class="row-ctl">
+      <div>
+        <div class="lbl" id="lbl-day">日にち</div>
+        <div class="seg" role="group" aria-labelledby="lbl-day" id="days"></div>
+      </div>
+      <div>
+        <div class="lbl" id="lbl-car">車の台数</div>
+        <div class="seg" role="group" aria-labelledby="lbl-car" id="carsN"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-pts">
+    <h2 id="h-pts">お迎えの一覧</h2>
+    <p class="sub">お迎えは、透析が終わってから<b>15分後</b>（止血と着替えの時間）。1台に1人ずつ乗せて組みます。</p>
+    <div class="pts" id="pts"></div>
+    <div id="verdict"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-tl">
+    <h2 id="h-tl">車ごとの回り方</h2>
+    <p class="sub">青い四角が「クリニックでお迎え → ご自宅へ」、点線は次のクリニックへ向かう移動です。</p>
+    <div class="card">
+      <div class="tl" id="tl"></div>
+      <div class="legend"><span><i style="background:var(--ai)"></i>お迎え〜ご自宅</span><span><i style="background:var(--ai);box-shadow:inset 0 0 0 3px var(--aka)"></i>お待たせする</span><span><i style="background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px);opacity:.6"></i>移動</span></div>
+    </div>
+    <div class="cars" id="cars"></div>
+  </section>
+
+  <section class="block" aria-labelledby="h-line">
+    <h2 id="h-line">LINEで送る文</h2>
+    <p class="sub">組んだ結果を、ヘルパーさんにそのまま送れる形にしています。</p>
+    <textarea class="line" id="lineText" readonly aria-labelledby="h-line"></textarea>
+    <div class="actions">
+      <button class="btn line-green" id="copy">文をコピーする</button>
+      <button class="linkbtn" id="reset">最初の状態にもどす</button>
+    </div>
+  </section>
+
+  <div class="note">
+    <p>名前・クリニック・場所・移動時間は、すべて架空の見本です。</p>
+    <p>実際の現場では、毎日変わる終了時間を入れて、その日の送迎を組むのに使っています。</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  // ---- 見本のデータ（すべて架空） ----
+  var PLACES = {
+    office:  {name:"事業所", x:3,   y:3},
+    clinicA: {name:"みどり透析クリニック", short:"みどり", x:4, y:2},
+    clinicB: {name:"あおぞら腎クリニック", short:"あおぞら", x:2, y:6},
+    shuri:   {name:"首里",   x:8,   y:3},
+    makabi:  {name:"真嘉比", x:5,   y:2.5},
+    asato:   {name:"安里",   x:4.5, y:4},
+    oroku:   {name:"小禄",   x:1.5, y:7.5},
+    tomari:  {name:"泊",     x:2.5, y:2.5},
+    kokuba:  {name:"古波蔵", x:4,   y:6},
+    ameku:   {name:"天久",   x:3,   y:1},
+    shikina: {name:"識名",   x:6,   y:6}
+  };
+  var DAYS = [
+    {key:"d19", label:"19日（木）", title:"11月19日（木）", pts:[
+      {name:"見本 花子", clinic:"clinicA", end:"11:30", home:"shuri"},
+      {name:"試し 一郎", clinic:"clinicB", end:"11:40", home:"oroku"},
+      {name:"見本 太郎", clinic:"clinicA", end:"11:45", home:"makabi"},
+      {name:"那覇 うめ", clinic:"clinicA", end:"12:15", home:"asato"},
+      {name:"首里 かめ", clinic:"clinicB", end:"12:30", home:"kokuba"}
+    ]},
+    {key:"d20", label:"20日（金）", title:"11月20日（金）", pts:[
+      {name:"試し 次郎", clinic:"clinicA", end:"11:20", home:"tomari"},
+      {name:"見本 しげ", clinic:"clinicB", end:"11:35", home:"shikina"},
+      {name:"見本 まつ", clinic:"clinicA", end:"11:50", home:"ameku"},
+      {name:"試し 春子", clinic:"clinicB", end:"12:05", home:"oroku"},
+      {name:"那覇 正男", clinic:"clinicA", end:"12:20", home:"shuri"},
+      {name:"見本 よし", clinic:"clinicA", end:"12:40", home:"makabi"}
+    ]}
+  ];
+  var DRIVERS = ["見本 ヘルパーA","見本 ヘルパーB","見本 ヘルパーC","見本 ヘルパーD"];
+  var PICKUP_AFTER = 15;   // 終了からお迎えまで（分）
+  var START = toMin("11:00"); // 車が事業所を出られる時間
+
+  var state;
+  function initState(){
+    state = {
+      day: 0, cars: 3,
+      ends: DAYS.map(function(d){ return d.pts.map(function(p){ return toMin(p.end); }); })
+    };
+  }
+
+  // ---- 時間の計算 ----
+  function toMin(s){ var a=s.split(":"); return (+a[0])*60 + (+a[1]); }
+  function fmt(m){ var h=Math.floor(m/60), mm=m%60; return h+":"+(mm<10?"0":"")+mm; }
+  function drive(a,b){
+    var p=PLACES[a], q=PLACES[b];
+    var d=Math.sqrt(Math.pow(p.x-q.x,2)+Math.pow(p.y-q.y,2));
+    return a===b ? 0 : Math.round(4 + d*2.6); // 見本の移動時間（分）
+  }
+
+  // ---- 組み方：お迎えの早い順に、間に合う車の中でいちばん無駄の少ない車を選ぶ ----
+  function plan(){
+    var day = DAYS[state.day];
+    var list = day.pts.map(function(p,i){
+      return {i:i, p:p, end:state.ends[state.day][i], pickup:state.ends[state.day][i]+PICKUP_AFTER};
+    }).sort(function(a,b){ return a.pickup-b.pickup; });
+
+    var cars = [];
+    for (var c=0;c<state.cars;c++) cars.push({n:c+1, driver:DRIVERS[c], at:"office", free:START, trips:[]});
+
+    var res = {};
+    list.forEach(function(item){
+      var best=null, bestArr=null, onTime=[];
+      cars.forEach(function(car){
+        var arr = car.free + drive(car.at, item.p.clinic);
+        if (arr <= item.pickup) onTime.push({car:car, arr:arr});
+      });
+      if (onTime.length){
+        onTime.sort(function(a,b){ return b.arr-a.arr; }); // ちょうどよく着く車
+        best=onTime[0].car; bestArr=onTime[0].arr;
+      } else {
+        cars.forEach(function(car){
+          var arr = car.free + drive(car.at, item.p.clinic);
+          if (bestArr===null || arr<bestArr){ best=car; bestArr=arr; }
+        });
+      }
+      var depart = best.free;
+      var pick = Math.max(bestArr, item.pickup);
+      var drop = pick + drive(item.p.clinic, item.p.home);
+      var trip = {pt:item, depart:depart, arrive:bestArr, pick:pick, drop:drop, wait:pick-item.pickup};
+      best.trips.push(trip);
+      best.at = item.p.home; best.free = drop;
+      res[item.i] = {car:best.n, trip:trip};
+    });
+    return {cars:cars, res:res, list:list};
+  }
+
+  // ---- 表示 ----
+  var $ = function(id){ return document.getElementById(id); };
+  function given(name){ var s=name.split(" "); return s[s.length-1]; }
+
+  function renderControls(){
+    $("days").innerHTML = DAYS.map(function(d,i){
+      return '<button type="button" aria-pressed="'+(i===state.day)+'" data-day="'+i+'">'+d.label+'</button>';
+    }).join("");
+    var h=""; for (var n=1;n<=4;n++) h+='<button type="button" aria-pressed="'+(n===state.cars)+'" data-cars="'+n+'">'+n+'台</button>';
+    $("carsN").innerHTML = h;
+  }
+
+  function render(flashIdx){
+    var day = DAYS[state.day], P = plan();
+    // お迎えの一覧
+    $("pts").innerHTML = day.pts.map(function(p,i){
+      var r = P.res[i], t = r.trip;
+      var st = t.wait>0 ? '<span class="chip wait">'+t.wait+'分お待たせ</span>' : '<span class="chip ok">時間どおり</span>';
+      return '<div class="pt'+(flashIdx===i?' flash':'')+'">'+
+        '<div><div class="name">'+p.name+' さん</div><div class="where">'+PLACES[p.clinic].name+' → '+PLACES[p.home].name+'</div></div>'+
+        '<div class="stepper">'+
+          '<button type="button" data-i="'+i+'" data-d="-5" aria-label="'+p.name+'さんの終わる時間を5分早める">−</button>'+
+          '<div class="t"><span class="cap">終わる時間</span>'+fmt(state.ends[state.day][i])+'</div>'+
+          '<button type="button" data-i="'+i+'" data-d="5" aria-label="'+p.name+'さんの終わる時間を5分遅らせる">＋</button>'+
+        '</div>'+
+        '<div class="res">お迎え <b>'+fmt(t.pick)+'</b> <span class="chip car">車'+r.car+'</span>'+st+'</div>'+
+      '</div>';
+    }).join("");
+
+    // まとめ
+    var waits = P.list.map(function(it){ return P.res[it.i].trip; }).filter(function(t){ return t.wait>0; });
+    if (!waits.length){
+      $("verdict").innerHTML = '<div class="verdict ok"><span class="ic">✓</span><div>'+state.cars+'台で、全員を時間どおりにお迎えできます。</div></div>';
+    } else {
+      var names = waits.map(function(t){ return t.pt.p.name+'さん（'+t.wait+'分）'; }).join("、");
+      $("verdict").innerHTML = '<div class="verdict ng"><span class="ic">！</span><div>'+waits.length+'人をお待たせします<small>'+names+'。車を1台増やすか、クリニックに待ち時間を伝えます。</small></div></div>';
+    }
+
+    // 時間の帯
+    var lo=Infinity, hi=-Infinity;
+    P.cars.forEach(function(c){ c.trips.forEach(function(t){ lo=Math.min(lo,t.pick-20); hi=Math.max(hi,t.drop); }); });
+    if (lo===Infinity){ lo=START; hi=START+120; }
+    lo = Math.floor(lo/30)*30; hi = Math.ceil(hi/30)*30; if (hi-lo<90) hi=lo+90;
+    var pct = function(m){ return ((m-lo)/(hi-lo)*100).toFixed(2)+"%"; };
+    var ticks=""; var lines="";
+    for (var m=lo;m<=hi;m+=30){ ticks+='<span style="left:'+pct(m)+'">'+fmt(m)+'</span>'; lines+='<div class="grid-line" style="left:'+pct(m)+'"></div>'; }
+    var tl = '<div class="tl-axis"><span></span><div class="axis">'+ticks+'</div></div>';
+    P.cars.forEach(function(c){
+      var inner = lines;
+      c.trips.forEach(function(t){
+        var ds = Math.max(t.depart, lo);
+        if (t.arrive>ds) inner += '<div class="drive" style="left:'+pct(ds)+';width:calc('+pct(t.arrive)+' - '+pct(ds)+')"></div>';
+        inner += '<div class="blk'+(t.wait>0?' late':'')+'" style="left:'+pct(t.pick)+';width:calc('+pct(t.drop)+' - '+pct(t.pick)+')" title="'+t.pt.p.name+'さん '+fmt(t.pick)+'〜'+fmt(t.drop)+'">'+given(t.pt.p.name)+'</div>';
+      });
+      tl += '<div class="tl-row"><div class="who">車'+c.n+'</div><div class="track" role="img" aria-label="車'+c.n+'：'+(c.trips.map(function(t){return fmt(t.pick)+' '+t.pt.p.name+'さん';}).join('、')||'出番なし')+'">'+inner+'</div></div>';
+    });
+    $("tl").innerHTML = tl;
+
+    // 車ごとの順番
+    $("cars").innerHTML = P.cars.map(function(c){
+      var body = c.trips.length ? '<ul class="stops">'+c.trips.map(function(t){
+        var p=t.pt.p;
+        return '<li><span class="tm">'+fmt(t.pick)+'</span><span>'+PLACES[p.clinic].short+'で <b>'+p.name+'さん</b> → '+PLACES[p.home].name+'（'+fmt(t.drop)+'ごろ着）'+(t.wait>0?'<br><span class="late">お迎え予定より'+t.wait+'分おそい</span>':'')+'</span></li>';
+      }).join("")+'</ul>' : '<p class="empty">この日は出番がありません。</p>';
+      return '<div class="card carcard"><h3>車'+c.n+' <small>運転：'+c.driver+'</small></h3>'+body+'</div>';
+    }).join("");
+
+    // LINEの文
+    var txt = "【"+day.title+" 透析のお迎え】\n";
+    P.cars.forEach(function(c){
+      if (!c.trips.length) return;
+      txt += "\n🚗 車"+c.n+"（"+c.driver+"さん）\n";
+      c.trips.forEach(function(t){
+        var p=t.pt.p;
+        txt += fmt(t.pick)+" "+PLACES[p.clinic].name+"\n　"+p.name+"さん → "+PLACES[p.home].name+(t.wait>0?"（"+t.wait+"分おくれ）":"")+"\n";
+      });
+    });
+    txt += "\n※1台に1人ずつです。変更があれば事務所に連絡してください。";
+    $("lineText").value = txt;
+  }
+
+  // ---- やってみよう ----
+  function done(id){ var el=$(id); if (el && !el.classList.contains("done")) el.classList.add("done"); }
+  var toastTimer;
+  function toast(msg){
+    var t=$("toast"); t.textContent=msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove("show"); }, 2600);
+  }
+  function copyText(text){
+    if (navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text).then(function(){return true;}, function(){ return fallback(); });
+    }
+    return Promise.resolve(fallback());
+    function fallback(){
+      var ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly","");
+      ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+      var ok=false; try{ ok=document.execCommand("copy"); }catch(e){} ta.remove(); return ok;
+    }
+  }
+
+  // ---- 操作 ----
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.day!==undefined){ state.day=+b.dataset.day; renderControls(); render(); return; }
+    if (b.dataset.cars!==undefined){
+      var n=+b.dataset.cars; if (n<3) done("g2");
+      state.cars=n; renderControls(); render(); return;
+    }
+    if (b.dataset.i!==undefined){
+      var i=+b.dataset.i, d=+b.dataset.d, v=state.ends[state.day][i]+d;
+      if (v<toMin("10:30")||v>toMin("14:00")) return;
+      state.ends[state.day][i]=v; done("g1"); render(i);
+      var again = document.querySelector('[data-i="'+i+'"][data-d="'+d+'"]'); if (again) again.focus();
+      return;
+    }
+  });
+  $("copy").addEventListener("click", function(){
+    copyText($("lineText").value).then(function(ok){
+      done("g3");
+      toast(ok ? "コピーしました。LINEに貼り付けて送れます" : "選んでコピーしてください");
+      if (!ok){ $("lineText").focus(); $("lineText").select(); }
+    });
+  });
+  $("reset").addEventListener("click", function(){
+    initState(); renderControls(); render();
+    ["g1","g2","g3"].forEach(function(id){ $(id).classList.remove("done"); });
+    window.scrollTo(0,0); toast("最初の状態にもどしました");
+  });
+
+  initState(); renderControls(); render();
+})();
+</script>
+</body>
+</html>
