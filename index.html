@@ -68,6 +68,15 @@
   .door svg.mark{position:absolute; right:-18px; bottom:-18px; width:150px; height:150px; opacity:.16}
   .door:active{transform:translateY(1px)}
 
+  header .yago{font-weight:700; color:var(--ai); margin-right:.6em}
+  .contact{margin-top:30px; padding:20px 18px; border:2px solid var(--ai); border-radius:6px}
+  .contact h2{font-size:20px; margin:0 0 6px}
+  .contact p{margin:0 0 14px; font-size:16px}
+  .contact .mail{
+    display:inline-block; background:var(--ai); color:#fff; font-weight:700; text-decoration:none;
+    padding:11px 18px; border-radius:999px; font-size:17px; word-break:break-all;
+  }
+  .contact .mail:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
   .note{
     margin:26px 0 0; padding:14px 16px; border-left:4px solid var(--line);
     color:var(--muted); font-size:15px;
@@ -136,7 +145,7 @@
 <section id="iriguchi">
 <div class="wrap">
   <header>
-    <p class="who"><strong>神里 伸也</strong>訪問介護ヘルパー</p>
+    <p class="who"><strong>神里 伸也</strong><span class="yago">yannsi works</span><br>訪問介護ヘルパー</p>
     <h1>現場で使う道具と、<br>作ってみたもの。</h1>
     <p class="lead">介護の仕事をしながら、毎日の困りごとを減らす道具を自分で作っています。気になる方をひらいてみてください。</p>
   </header>
@@ -168,6 +177,12 @@
   </main>
 
   <p class="note">どれもスマホのブラウザでそのまま動きます。アプリのインストールやログインはいりません。</p>
+
+  <section class="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">ご相談・ご連絡</h2>
+    <p>「現場でこんな道具がほしい」「うちでも使えるか聞きたい」など、お気軽にどうぞ。</p>
+    <a class="mail" href="mailto:yannsiworks@gmail.com">yannsiworks@gmail.com</a>
+  </section>
 
   <footer>
     <p>作品のコードは GitHub で公開しています：<a href="https://github.com/yannsi">github.com/yannsi</a></p>
