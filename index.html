@@ -72,6 +72,9 @@
   .contact{margin-top:30px; padding:20px 18px; border:2px solid var(--ai); border-radius:6px}
   .contact h2{font-size:20px; margin:0 0 6px}
   .contact p{margin:0 0 14px; font-size:16px}
+  .contact .soudan{margin:4px 0 12px; padding:0; list-style:none; display:grid; gap:8px}
+  .contact .soudan li{position:relative; padding-left:1.3em; font-size:16px; line-height:1.6}
+  .contact .soudan li::before{content:""; position:absolute; left:.2em; top:.62em; width:.5em; height:.5em; border-radius:2px; background:var(--ai)}
   .contact .mail{
     display:inline-block; background:var(--ai); color:#fff; font-weight:700; text-decoration:none;
     padding:11px 18px; border-radius:999px; font-size:17px; word-break:break-all;
@@ -190,8 +193,13 @@
   <p class="note">工作室の作品は、スマホのブラウザでそのまま動きます。アプリのインストールやログインはいりません。</p>
 
   <section class="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h">ご相談・ご連絡</h2>
-    <p>「現場でこんな道具がほしい」「うちでも使えるか聞きたい」など、お気軽にどうぞ。</p>
+    <h2 id="contact-h">こんなことで相談できます</h2>
+    <ul class="soudan">
+      <li>紙やExcelで回している業務を、スマホで使える形にしたい</li>
+      <li>送迎・勤務・予約など、毎回人が頭で組んでいる作業を楽にしたい</li>
+      <li>買うほどの規模ではないけれど、自分の事業所に合う道具がほしい</li>
+    </ul>
+    <p>介護現場で働きながら作っているので、現場の言葉でお話しできます。<span style="white-space:nowrap">お気軽にどうぞ。</span></p>
     <a class="mail" href="mailto:yannsiworks@gmail.com">yannsiworks@gmail.com</a>
   </section>
 
