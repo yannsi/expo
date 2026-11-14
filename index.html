@@ -214,23 +214,23 @@
   <div class="inner">
     <label class="back" for="v-top" role="button" tabindex="0">入口にもどる</label>
     <h1>仕事のツール集</h1>
-    <p>訪問介護の事業所で、毎日の事務に使っている道具です。動画と写真はどれも、架空のデータ（見本）で動かした画面です。</p>
+    <p>訪問介護の事業所で、毎日の事務に使っている道具です。写真はどれも、架空のデータ（見本）で動かした画面です。</p>
   </div>
 </div>
 
 <main class="ks-main">
-  <p class="lead-note">「見本で動かす」を押すと、架空のデータでその場でさわって試せます。ログインはいらず、さわっても保存されません。動画は、ふだん使っている画面を架空のデータで動かしたもので、見本の画面とは見た目が少しちがいます。</p>
+  <p class="lead-note">「見本で動かす」を押すと、架空のデータでその場でさわって試せます。ログインはいらず、さわっても保存されません。写真は、ふだん使っている画面を架空のデータで写したもので、見本の画面とは見た目が少しちがいます。</p>
     <article class="shot">
       <h3>透析終了時間管理と送迎の組み方</h3>
       <p>透析が終わる時間から、お迎えの時間と車ごとの回り方を自動で組み、ヘルパーさんに送るLINEの文まで作ります。いちばん毎日使っている道具です。</p>
       <a class="try" href="mihon/toseki/">見本で動かす</a>
-      <video src="video/toseki.mp4" poster="video/toseki-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="送迎の組み方を動かしている動画。車の台数を3台から2台に減らすと組み方が変わり、LINE用の文をコピーする"></video>
+      <img src="video/toseki-poster.jpg" width="540" height="970" loading="lazy" alt="透析終了時間の管理画面。クリニックごとの一覧と、送迎の組み方のボタン">
     </article>
     <article class="shot">
       <h3>休み希望（ヘルパーさんの画面）</h3>
       <p>ヘルパーさんがLINEから開いて、翌月の休みの希望を送ります。名前を選んで日付を押すだけです。</p>
       <a class="try" href="mihon/yasumi/">見本で動かす</a>
-      <video src="video/yasumi.mp4" poster="video/yasumi-poster.jpg" width="540" height="970" autoplay muted loop playsinline preload="metadata" aria-label="休み希望を入れている動画。名前を選び、日付を押して休・年休・午前休を入れる"></video>
+      <img src="video/yasumi-poster.jpg" width="540" height="970" loading="lazy" alt="休み希望の画面。はじめに自分の名前を選ぶ">
     </article>
     <article class="shot">
       <h3>休み希望（事務所の画面）</h3>
@@ -421,9 +421,6 @@
         if (e.key === "Enter" || e.key === " "){ e.preventDefault(); l.click(); }
       });
     });
-    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.shot video').forEach(function(v){ v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
-    }
   }catch(e){}
 </script>
 </body>
