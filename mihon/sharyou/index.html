@@ -76,6 +76,7 @@
   .todo .what{font-weight:700; font-size:18px; line-height:1.4}
   .todo .what small{font-weight:400; color:var(--muted); font-size:14px; margin-left:4px}
   .todo .when{font-size:15px; color:var(--muted)}
+  .nw{white-space:nowrap}
   .badge{display:inline-block; padding:1px 10px; border-radius:999px; font-size:14px; font-weight:700; margin-right:6px}
   .badge.lv-red{background:var(--aka-soft); color:var(--aka)}
   .badge.lv-orange{background:var(--dai-soft); color:var(--dai)}
@@ -163,9 +164,11 @@
 (function(){
   var DAY = 86400000;
   var WD = ["日","月","火","水","木","金","土"];
-  var OIL_DAYS = 182, OIL_KM = 5000, SOON = 60, KM_SOON = 500;
+  var OIL_MONTHS = 6, OIL_KM = 5000, SOON = 60, KM_SOON = 500;
   var T0 = new Date(); T0.setHours(0,0,0,0);
   function addDays(d,n){ var x=new Date(d.getTime()); x.setDate(x.getDate()+n); return x; }
+  // 「6か月」は日数ではなく月で数える（月末は、その月の最後の日に合わせる）
+  function addMonths(d,n){ var x=new Date(d.getTime()), day=x.getDate(); x.setDate(1); x.setMonth(x.getMonth()+n); x.setDate(Math.min(day, new Date(x.getFullYear(), x.getMonth()+1, 0).getDate())); return x; }
   function addYears(d,n){ var x=new Date(d.getTime()); x.setFullYear(x.getFullYear()+n); return x; }
   function diff(d){ return Math.round((d - T0)/DAY); }
   function fmtD(d){ return (d.getFullYear()!==T0.getFullYear()? d.getFullYear()+"年":"")+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WD[d.getDay()]+"）"; }
@@ -191,7 +194,7 @@
   function dayText(days){ return days<0 ? (-days)+"日過ぎています" : days===0 ? "今日まで" : "あと"+days+"日"; }
 
   function oilInfo(c){
-    var due = addDays(c.oilDate, OIL_DAYS), days = diff(due), kmLeft = c.oilKm + OIL_KM - c.km;
+    var due = addMonths(c.oilDate, OIL_MONTHS), days = diff(due), kmLeft = c.oilKm + OIL_KM - c.km;
     var byKm = kmLeft<=KM_SOON && (kmLeft < days*40);
     return {due:due, days:days, kmLeft:kmLeft, byKm:byKm, lv:level(days,kmLeft),
       text: kmLeft<=0 ? nf(-kmLeft)+"km こえています" : byKm ? "あと"+nf(kmLeft)+"km" : dayText(days),
@@ -218,8 +221,9 @@
     $("todo").innerHTML = L.length ? L.map(function(x){
       var c=cars[x.i], key=x.i+x.t;
       var when = x.t==="oil"
-        ? (x.byKm ? "目安 "+nf(c.oilKm+OIL_KM)+"km（今 "+nf(c.km)+"km）" : "目安 "+fmtD(x.date)+"・"+nf(c.oilKm+OIL_KM)+"km")
-        : "期限 "+fmtD(x.date);
+        ? (x.byKm ? "目安 "+nf(c.oilKm+OIL_KM)+"km（今 "+nf(c.km)+"km）" : "目安 "+nw(fmtD(x.date))+"・"+nw(nf(c.oilKm+OIL_KM)+"km"))
+        : "期限 "+nw(fmtD(x.date));
+      function nw(t){ return '<span class="nw">'+t+'</span>'; }
       return '<li class="lv-'+x.lv+(fresh[key]?' in':'')+'">'+
         '<div><div class="what">'+c.name+'　'+x.label+(x.note?'<small>（'+x.note+'）</small>':'')+'</div>'+
         '<div class="when"><span class="badge lv-'+x.lv+'">'+x.text+'</span>'+when+'</div></div>'+
@@ -256,7 +260,7 @@
     var btn = e.target.closest("button"); if (!btn) return;
     if (btn.dataset.done!==undefined){
       var i=+btn.dataset.done, t=btn.dataset.t, c=cars[i], msg;
-      if (t==="oil"){ c.oilDate=new Date(T0); c.oilKm=c.km; msg=c.name+"のオイル交換を記録しました。次は "+fmtD(addDays(T0,OIL_DAYS))+" か "+nf(c.km+OIL_KM)+"km"; }
+      if (t==="oil"){ c.oilDate=new Date(T0); c.oilKm=c.km; msg=c.name+"のオイル交換を記録しました。次は "+fmtD(addMonths(T0,OIL_MONTHS))+" か "+nf(c.km+OIL_KM)+"km"; }
       if (t==="shaken"){ c.shaken=addYears(c.shaken,2); msg=c.name+"の車検を記録しました。次は "+fmtD(c.shaken); }
       if (t==="nini"){ c.nini=addYears(c.nini,1); msg=c.name+"の任意保険を更新しました。次は "+fmtD(c.nini); }
       $("g1").classList.add("done"); render(); toast(msg);
