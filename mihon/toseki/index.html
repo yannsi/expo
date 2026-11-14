@@ -107,13 +107,14 @@
   /* 時間の帯 */
   .tl{margin-top:4px}
   .tl-axis,.tl-row{display:grid; grid-template-columns:46px 1fr; gap:8px; align-items:center}
-  .tl-row{margin-top:8px}
+  .tl-row{margin-top:8px; padding-bottom:16px}
   .tl-row .who{font-weight:700; font-size:15px}
   .track{position:relative; height:40px; background:var(--track); border-radius:6px}
   .axis{position:relative; height:20px; font-size:12px; color:var(--muted)}
   .axis span{position:absolute; transform:translateX(-50%); white-space:nowrap}
   .grid-line{position:absolute; top:0; bottom:0; width:1px; background:var(--line)}
   .blk{position:absolute; top:5px; bottom:5px; border-radius:4px; background:var(--ai); color:#fff; font-size:12px; font-weight:700; overflow:hidden; white-space:nowrap; padding:0 4px; display:flex; align-items:center; justify-content:center; min-width:4px}
+  .blk-nm{position:absolute; top:100%; margin-top:1px; transform:translateX(-50%); font-size:12px; font-weight:700; color:var(--ink); white-space:nowrap}
   .blk.late{box-shadow:inset 0 0 0 3px var(--aka)}
   .drive{position:absolute; top:17px; height:6px; border-radius:3px; background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px); opacity:.6}
   .legend{display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--muted); margin-top:10px}
@@ -362,7 +363,8 @@
       c.trips.forEach(function(t){
         var ds = Math.max(t.depart, lo);
         if (t.arrive>ds) inner += '<div class="drive" style="left:'+pct(ds)+';width:calc('+pct(t.arrive)+' - '+pct(ds)+')"></div>';
-        inner += '<div class="blk'+(t.wait>0?' late':'')+'" style="left:'+pct(t.pick)+';width:calc('+pct(t.drop)+' - '+pct(t.pick)+')" title="'+t.pt.p.name+'さん '+fmt(t.pick)+'〜'+fmt(t.drop)+'">'+given(t.pt.p.name)+'</div>';
+        inner += '<div class="blk'+(t.wait>0?' late':'')+'" style="left:'+pct(t.pick)+';width:calc('+pct(t.drop)+' - '+pct(t.pick)+')" title="'+t.pt.p.name+'さん '+fmt(t.pick)+'〜'+fmt(t.drop)+'"></div>';
+        inner += '<span class="blk-nm" style="left:calc(('+pct(t.pick)+' + '+pct(t.drop)+') / 2)">'+given(t.pt.p.name)+'</span>';
       });
       tl += '<div class="tl-row"><div class="who">車'+c.n+'</div><div class="track" role="img" aria-label="車'+c.n+'：'+(c.trips.map(function(t){return fmt(t.pick)+' '+t.pt.p.name+'さん';}).join('、')||'出番なし')+'">'+inner+'</div></div>';
     });
